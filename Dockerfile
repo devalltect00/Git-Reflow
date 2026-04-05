@@ -20,12 +20,13 @@ RUN pip install --upgrade pip \
 
 # Copy only necessary files first (better caching)
 COPY pyproject.toml README.md ./
+COPY app ./app
 
 # Install project
 RUN pip install --no-cache-dir .
 
 # Copy source
-COPY app ./app
+COPY . .
 
 # CLI entry
 ENTRYPOINT ["reflow"]
