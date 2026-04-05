@@ -1,0 +1,21 @@
+[project]
+name = "git-reflow"
+version = "0.1.0"
+description = "Git tag replay & Docker build orchestrator"
+authors = [
+    { name="Devalltect" }
+]
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "typer",
+    "rich",
+    "colorama",
+]
+
+[project.scripts]
+reflow = "app.cli:app"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
