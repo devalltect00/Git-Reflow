@@ -5,4 +5,5 @@ test:
   image: python:3.14
   script:
     - pip install -e .[dev]
+    - pip install -r requirements.txt
     - pytest
