@@ -839,6 +839,7 @@ Common directories include:
 │   │   └── pythonw.exe
 │   ├── .gitignore
 │   └── pyvenv.cfg
+├── .coverage
 ├── .dockerignore
 ├── .gitignore
 ├── .gitlab-ci.yml

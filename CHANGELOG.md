@@ -14,9 +14,44 @@ Unreleased
 
 **Summary**
 
-Record the optional repository-maintenance helper for Reflow.
-This is an untagged development checkpoint after the private GitLab Python
-package delivery checkpoint, not a new release or application command.
+Correct Reflow's GitHub release-note generation so reviewed annotated tag
+messages, release metadata, and Docker usage render as documentation instead of
+being interpreted by the workflow shell.
+
+This is an untagged development checkpoint after the repository-metadata
+maintenance checkpoint. It hardens release presentation without changing the
+Reflow CLI, GitLab publication behavior, package version, or release tag.
+
+### 📚 Documentation
+
+#### Reflow
+
+- Reworked the README around the current release-recovery, tag-conversion, repository-targeting, and Docker workflows.
+- Added MkDocs navigation and focused user, command, configuration, installation, infrastructure, testing, developer, and architecture guides.
+- Added command documentation for initialization, tag conversion, release recovery, the deprecated replay alias, and Docker publishing.
+- Added repository-targeting architecture and Mermaid diagrams for the application layers, workflows, lifecycle, initialization, conversion, recovery, and Docker publishing.
+- Added a dedicated Q&A and troubleshooting section covering local versus URL targets, temporary clones, authentication, remote effects, duplicate-looking converted tags, confirmations, dry-run, and registry destinations.
+- Added configuration, usage, examples, and Q&A guidance for progress visibility and non-interactive output.
+- Clarified that release recovery currently inspects GitHub Releases, retriggers existing CI/CD, and does not create a release page directly.
+- Add regression coverage for build-version normalization, shell-free Git
+- Document the branch, tag, container, release, and `latest` contracts for
+- Record the untagged checkpoint → RC.1 commit and tag → stable commit and tag
+- Keep local validation non-publishing; these message templates do not create a
+
+#### Repository
+
+- Refresh README installation guidance for the private GitLab PyPI registry,
+- Align README commands, configuration paths, and runtime requirements with
+- Add dated checkpoint notes to the active TODO histories while retaining
+- Carry a short maintainer-tooling note into the pending release commit
+
+### Review Boundary And Follow Up
+
+#### Repository
+
+- This checkpoint records source and documentation review, not a live metadata
+- Track correction of the helper's stale usage path and GitHub topic-limit
+- Require a separate target review and explicit authorization before live
 
 ### Private Package Delivery
 
@@ -163,29 +198,6 @@ package delivery checkpoint, not a new release or application command.
 - Added regression coverage for configuration precedence, initialization, shared exceptions and results, command versions, banner behavior, and the modular Make interface.
 - Added reusable progress-helper, remote-clone visibility, configured progress suppression, nested-help, actionable configuration-error, and Windows-safe CLI regression coverage.
 
-### 📚 Documentation
-
-#### Reflow
-
-- Reworked the README around the current release-recovery, tag-conversion, repository-targeting, and Docker workflows.
-- Added MkDocs navigation and focused user, command, configuration, installation, infrastructure, testing, developer, and architecture guides.
-- Added command documentation for initialization, tag conversion, release recovery, the deprecated replay alias, and Docker publishing.
-- Added repository-targeting architecture and Mermaid diagrams for the application layers, workflows, lifecycle, initialization, conversion, recovery, and Docker publishing.
-- Added a dedicated Q&A and troubleshooting section covering local versus URL targets, temporary clones, authentication, remote effects, duplicate-looking converted tags, confirmations, dry-run, and registry destinations.
-- Added configuration, usage, examples, and Q&A guidance for progress visibility and non-interactive output.
-- Clarified that release recovery currently inspects GitHub Releases, retriggers existing CI/CD, and does not create a release page directly.
-- Add regression coverage for build-version normalization, shell-free Git
-- Document the branch, tag, container, release, and `latest` contracts for
-- Record the untagged checkpoint → RC.1 commit and tag → stable commit and tag
-- Keep local validation non-publishing; these message templates do not create a
-
-#### Repository
-
-- Refresh README installation guidance for the private GitLab PyPI registry,
-- Align README commands, configuration paths, and runtime requirements with
-- Add dated checkpoint notes to the active TODO histories while retaining
-- Carry a short maintainer-tooling note into the pending release commit
-
 ### ⚙️ CI/CD
 
 #### Reflow
@@ -230,17 +242,33 @@ package delivery checkpoint, not a new release or application command.
 - The console entrypoint moves from `app.cli:app` to `app.cli.main:main`.
 - Internal CLI, core, service, executor, configuration, UI, and extension module paths have changed substantially.
 
-### Review Boundary And Follow Up
+### 🚀 Releases
 
-#### Repository
+- Replace the unquoted Markdown heredoc with explicit `printf` output so inline
+- Preserve the complete annotated tag message as the primary GitHub Release
+- Populate the version, release type, repository, commit, and workflow fields
 
-- This checkpoint records source and documentation review, not a live metadata
-- Track correction of the helper's stale usage path and GitHub topic-limit
-- Require a separate target review and explicit authorization before live
+### Docker Guidance
+
+- Publish concise commands for pulling the exact release image and verifying
+- Keep prerelease images on their exact tag and explain that only stable
+- Prevent Docker pulls, layer progress, and runner output from executing or
+
+### Regression Protection And Validation
+
+- Extend the container-workflow regression test to reject the unsafe heredoc
+- Pass the focused workflow tests and the complete suite: 365 tests with 92%
+- Pass targeted Ruff, Black, whitespace, end-of-file, and diff checks.
+
+### Scope
+
+- Keep GitLab's already escaped release-note generation unchanged.
+- Keep this checkpoint untagged; it becomes part of the cumulative
+- Do not change application commands, configuration, package metadata, Docker
 
 **Tags**
 
-feature • bugfix • docs • breaking-change • tests • ci • build • repository • repository-metadata • github • gitlab • dry-run • checkpoint • untagged • maintainer-tooling
+release • feature • bugfix • docs • breaking-change • tests • ci • build • github-actions • release-notes • docker • markdown
 
 ## v0.1.0 (2026-08-28)
 
