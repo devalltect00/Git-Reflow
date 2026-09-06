@@ -22,10 +22,11 @@ Reflow currently supports:
 | ------------------------ | ----------- | ----------------------- |
 | GitHub Clone             | ✅          | Most users              |
 | GitLab Clone             | ✅          | GitLab users            |
+| Private GitLab PyPI      | ✅          | Authorized deployments  |
 | Wheel (.whl)             | ✅          | Stable releases         |
 | Source Archive (.tar.gz) | ✅          | Offline installation    |
 | Editable Installation    | ✅          | Contributors            |
-| PyPI                     | ❌          | Not currently available |
+| Public PyPI              | ❌          | Not currently available |
 
 ---
 
@@ -106,18 +107,47 @@ GitLab-hosted projects
 
 ---
 
-# Method 3 — Wheel File (.whl)
+# Method 3 — Private GitLab PyPI Registry
+
+Reflow releases are published as the `git-reflow` distribution in the
+project's private GitLab package registry. Use a deploy token with
+`read_package_registry` access and keep credentials out of committed files:
+
+```bash
+python -m pip install \
+  --index-url "https://<deploy-token-user>:<deploy-token>@gitlab.com/api/v4/projects/<project-id>/packages/pypi/simple" \
+  "git-reflow==1.0.0"
+```
+
+Install a release candidate explicitly with its PEP 440 version:
+
+```bash
+python -m pip install \
+  --index-url "https://<deploy-token-user>:<deploy-token>@gitlab.com/api/v4/projects/<project-id>/packages/pypi/simple" \
+  "git-reflow==1.0.0rc1"
+```
+
+The corresponding repository tag may be `v1.0.0-rc.1`; the package registry
+stores its normalized version as `1.0.0rc1`.
+
+For strictly private resolution, disable package forwarding in the GitLab group
+settings. Avoid `--extra-index-url` for private packages because consulting
+multiple indexes can expose a dependency-confusion path.
+
+---
+
+# Method 4 — Wheel File (.whl)
 
 Example:
 
 ```text
-reflow-1.0.0-py3-none-any.whl
+git_reflow-1.0.0-py3-none-any.whl
 ```
 
 Install:
 
 ```bash
-pip install reflow-1.0.0-py3-none-any.whl
+pip install git_reflow-1.0.0-py3-none-any.whl
 ```
 
 Advantages:
@@ -144,18 +174,18 @@ CI/CD runners
 
 ---
 
-# Method 4 — Source Archive (.tar.gz)
+# Method 5 — Source Archive (.tar.gz)
 
 Example:
 
 ```text
-reflow-1.0.0.tar.gz
+git_reflow-1.0.0.tar.gz
 ```
 
 Install:
 
 ```bash
-pip install reflow-1.0.0.tar.gz
+pip install git_reflow-1.0.0.tar.gz
 ```
 
 Advantages:
@@ -182,7 +212,7 @@ Long-term storage
 
 ---
 
-# Method 5 — Editable Installation
+# Method 6 — Editable Installation
 
 Clone:
 
@@ -331,7 +361,7 @@ Immediate updates
 Recommended:
 
 ```bash
-pip install reflow-1.0.0-py3-none-any.whl
+pip install git_reflow-1.0.0-py3-none-any.whl
 ```
 
 Benefits:
@@ -427,8 +457,8 @@ Source Archive
 | New User    | GitHub Clone          |
 | GitLab User | GitLab Clone          |
 | Contributor | Editable Installation |
-| Production  | Wheel                 |
-| CI/CD       | Wheel                 |
+| Production  | Private GitLab PyPI or wheel |
+| CI/CD       | Private GitLab PyPI or wheel |
 | Offline     | Source Archive        |
 
 ---

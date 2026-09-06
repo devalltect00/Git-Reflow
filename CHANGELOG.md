@@ -14,17 +14,8 @@ Unreleased
 
 **Summary**
 
-Checkpoint the Reflow 1.0 redesign foundation, consolidating the major
-CLI, repository-targeting, version-conversion, release-recovery, Docker,
-architecture, safety, testing, tooling, and documentation changes developed
-after v0.1.0.
-
-This untagged checkpoint prepares Reflow's first 1.0 release candidate by
-evolving the small, current-directory-oriented Git automation script into a
-structured release-workflow toolkit. The new
-foundation makes operations clearer and safer for users while giving
-contributors focused components that are easier to locate, test, debug,
-maintain, replace, and extend.
+Add the private GitLab PyPI distribution path for Reflow and harden the
+release boundary before the v1.0.0-rc.1 promotion commit.
 
 ### ✨ Features
 
@@ -194,9 +185,46 @@ maintain, replace, and extend.
 - The console entrypoint moves from `app.cli:app` to `app.cli.main:main`.
 - Internal CLI, core, service, executor, configuration, UI, and extension module paths have changed substantially.
 
+### Private Package Delivery
+
+#### Distribution
+
+- Publish the `git-reflow` wheel and source distribution to the project-level
+- Keep `reflow` as the installed console command while using `git-reflow` as
+- Convert reviewed SemVer release tags to canonical PEP 440 package versions,
+- Use GitLab's short-lived `CI_JOB_TOKEN` for publication and document deploy
+- Keep published versions immutable: duplicate uploads fail instead of
+
+### Validation And Release Safeguards
+
+#### Distribution
+
+- Validate every pushed tag without granting every tag publication authority.
+- Let unprotected tags complete package validation successfully while skipping
+- Require a protected, non-empty annotated release tag before any external
+- Reject unsupported or ambiguous versions, lightweight tags, empty tag
+- Build exactly one wheel and one source distribution, run `twine check`,
+
+### Pipeline And Documentation Alignment
+
+#### Distribution
+
+- Order the GitLab release path as test → package validation → production
+- Keep retained package artifacts available for inspecting validation-only tag
+- Update CI/CD guidance with the protected-tag contract, deploy-token install
+- Add structural regression coverage for validation-only unprotected tags and
+
+### Validation
+
+#### Distribution
+
+- Passed the full Reflow suite: 365 tests.
+- Passed focused GitLab workflow structural checks: 7 tests.
+- Passed Ruff, Black, GitLab YAML parsing, and repository diff checks.
+
 **Tags**
 
-feature • bugfix • docs • breaking-change • tests • ci • build • reflow
+feature • bugfix • docs • breaking-change • tests • ci • build • distribution
 
 ## v0.1.0 (2026-08-28)
 

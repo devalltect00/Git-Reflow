@@ -4,7 +4,9 @@
 
 This guide explains the supported methods for installing Reflow.
 
-Reflow is currently **not published to PyPI**, so installation differs from traditional Python packages.
+Reflow is currently **not published to the public PyPI index**. Authorized
+users can install it from the project's private GitLab PyPI registry; source,
+repository, and release-artifact installations remain available.
 
 This means:
 
@@ -12,13 +14,14 @@ This means:
 pip install reflow
 ```
 
-is **not currently supported**.
+without a private index is **not currently supported**.
 
 Instead, Reflow can be installed using:
 
 - Source code
 - GitHub repository
 - GitLab repository
+- Private GitLab PyPI registry
 - Release artifacts (`.whl`)
 - Release artifacts (`.tar.gz`)
 
@@ -26,14 +29,15 @@ Instead, Reflow can be installed using:
 
 # Supported Installation Methods
 
-| Method                   | Recommended | Use Case                |
-| ------------------------ | ----------- | ----------------------- |
-| Source Installation      | ✅          | Development             |
-| GitHub Repository        | ✅          | Most users              |
-| GitLab Repository        | ✅          | GitLab users            |
-| Wheel File (.whl)        | ✅          | Stable releases         |
-| Source Archive (.tar.gz) | ✅          | Offline installation    |
-| PyPI                     | ❌          | Not currently supported |
+| Method                    | Recommended | Use Case                |
+| ------------------------- | ----------- | ----------------------- |
+| Source Installation       | ✅          | Development             |
+| GitHub Repository         | ✅          | Most users              |
+| GitLab Repository         | ✅          | GitLab users            |
+| Private GitLab PyPI       | ✅          | Authorized deployments  |
+| Wheel File (.whl)         | ✅          | Stable releases         |
+| Source Archive (.tar.gz)  | ✅          | Offline installation    |
+| Public PyPI               | ❌          | Not currently supported |
 
 ---
 
@@ -54,6 +58,26 @@ GitHub CLI
 ```
 
 depending on which commands you intend to use.
+
+---
+
+# Install From the Private GitLab PyPI Registry
+
+Use a GitLab deploy token with `read_package_registry` access. Replace the
+placeholders with the project ID and deploy-token credentials:
+
+```bash
+python -m pip install \
+  --index-url "https://<deploy-token-user>:<deploy-token>@gitlab.com/api/v4/projects/<project-id>/packages/pypi/simple" \
+  "git-reflow==1.0.0"
+```
+
+Release-candidate tags are normalized to PEP 440 package versions. For
+example, tag `v1.0.0-rc.1` is installed as `git-reflow==1.0.0rc1`.
+
+Keep tokens out of committed files and shell history. For strictly private
+dependency resolution, disable GitLab package forwarding and avoid using a
+private registry through `--extra-index-url`.
 
 ---
 
