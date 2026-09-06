@@ -1,5 +1,10 @@
 # TODO
 
+> Cumulative snapshot for **v1.0.0-rc.1**. Earlier tasks, unfinished work,
+> considerations, ideas, cancelled items, and notes are intentionally retained.
+
+# Reflow TODO Tracking History — v1.0.0-rc.1
+
 > Current status: see the [2026-09-06 checkpoint update](#checkpoint-4-2026-09-06).
 > Older checkboxes, test counts, plans, and decisions are preserved as recorded;
 > they are historical context, not proof that every current release gate passed.
@@ -84,6 +89,173 @@ fix why app error when run the command
 
 ---
 
+## Since v0.1.0
+
+- [x] Create a simple Reflow CLI for replaying Git tags to retrigger tag-based CI/CD workflows.
+- [x] Add basic one-way conversion from PEP 440 tag names to Semantic Versioning tag names.
+- [x] Build and publish one Docker image per Git tag to GHCR, GitLab Container Registry, or both, using `.reflow.toml` configuration.
+
+---
+
+## Since v1.0.0-rc.1
+
+### Version context
+
+| Field            | Value                                                                                                                |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Version          | `v1.0.0-rc.1`                                                                                                        |
+| Previous version | `v0.1.0`                                                                                                             |
+| Release type     | Major release candidate                                                                                              |
+| Version strategy | Semantic Versioning                                                                                                  |
+| Runtime policy   | Python 3.14+                                                                                                         |
+| Purpose          | Validate repository targeting, tag replacement, release recovery, Docker publishing, and the redesigned architecture |
+
+### Completed release-candidate scope
+
+#### Commands and targeting
+
+- [x] Establish `reflow init`, `reflow tags convert local`, `reflow tags convert remote`, `reflow releases recover`, and `reflow dockerize` as the supported command set.
+- [x] Keep `reflow tags replay` as a clearly deprecated compatibility alias.
+- [x] Add explicit local targets through `--repository`, `--repo`, and `-C`.
+- [x] Add direct HTTPS, SSH, Git-protocol, and SCP-style URL targeting through `--repository-url`.
+- [x] Add mutually exclusive configured `path` and `url` targets with actionable conflict errors.
+- [x] Materialize URL targets in managed temporary clones and clean them after success or failure.
+- [x] Keep `reflow init` local-only.
+
+#### Tag conversion
+
+- [x] Add explicit local and remote conversion scopes.
+- [x] Convert PEP 440 to SemVer by default and support SemVer to PEP 440 with `--to pep440`.
+- [x] Preview every planned mapping, skipped tag, target repository, and mutation scope.
+- [x] Require confirmation for live conversion, with `--yes`/`-y` for reviewed automation.
+- [x] Use all-or-nothing local reference transactions and guarded atomic remote replacement.
+- [x] Preserve lightweight targets and supported annotated-tag metadata.
+- [x] Reject signed tags, collisions, invalid plans, and incompatible remote state before mutation.
+- [x] Verify post-operation results and report converted, skipped, failed, and no-op outcomes accurately.
+
+#### Release recovery and Docker
+
+- [x] Discover GitHub tags that do not have corresponding GitHub Releases.
+- [x] Re-push selected tags to retrigger existing tag-based CI/CD rather than creating releases directly.
+- [x] Add stable-only filtering, limits, delays, previews, confirmation, and summaries.
+- [x] Build and publish Docker images from the selected repository and its tags.
+- [x] Support GHCR, GitLab Container Registry, or both providers.
+- [x] Show repository, build context, provider, and image destinations before execution.
+- [x] Add per-image failure details, partial-publication accounting, and reliable nonzero failure exits.
+
+#### Safety, UI, and architecture
+
+- [x] Apply dry-run simulation to initialization, conversion, recovery, Docker build/tag/push/cleanup, and temporary-clone workflows.
+- [x] Keep persistent local, remote, and registry mutations behind explicit live execution.
+- [x] Add Rich banners, panels, tables, confirmations, summaries, spinners, and determinate progress.
+- [x] Add configurable progress output and Windows-safe completion rendering.
+- [x] Centralize expected and unexpected CLI error handling without duplicate normal-mode tracebacks.
+- [x] Separate CLI, repository, Git, GitHub, Docker, initialization, dry-run, task execution, services, executors, UI, and configuration responsibilities.
+
+#### Tooling, tests, and documentation
+
+- [x] Add modular Make, Docker, Compose, CI/CD, packaging, Ruff, Black, Pytest, pre-commit, and MkDocs workflows.
+- [x] Add repository-target, clone-lifecycle, conversion, transaction, recovery, Docker, initialization, dry-run, progress, help, and error-boundary regression tests.
+- [x] Ensure tests do not require a user-generated `.config/reflow/config.toml`.
+- [x] Document all commands, repository selection, dry-run, confirmation, progress, conversion, recovery, Docker, Q&A, troubleshooting, and architecture.
+- [x] Prepare separate internal commit and public release messages for RC.1 and stable 1.0.0.
+
+### Breaking-change checklist
+
+- [x] Document migration from `.reflow.toml` to `.config/reflow/config.toml`.
+- [x] Document replacement of `convert-tags` with explicit local and remote conversion commands.
+- [x] Document replacement of `replay-tags` with `releases recover`.
+- [x] Remove additive conversion semantics based on `--push` and `--delete-old` from the supported workflow.
+- [x] Document the new console entry point, target model, and internal extension boundaries.
+
+### RC validation checklist
+
+#### CI/CD release safeguards completed for RC.1
+
+- [x] Derive GHCR destinations from the active repository instead of a hardcoded owner or project name.
+- [x] Use the root multi-stage Dockerfile and explicit development or production targets in GitHub and GitLab jobs.
+- [x] Require an existing non-empty annotated SemVer tag before production image or release publication.
+- [x] Publish exact prerelease image tags without updating `latest`; reserve `latest` for stable releases.
+- [x] Preserve the full annotated tag message as provider release notes and attach package artifacts.
+- [x] Resolve package versions outside the Docker context and validate release-tag agreement.
+- [x] Pin Ruff and Black consistently and add regression coverage for the hosted workflow contract.
+- [x] Keep the comprehensive 1.0 redesign commit as an untagged development checkpoint and reserve the RC.1 tag for the CI/CD-finalization commit.
+
+- [ ] Validate initialization in a disposable local repository.
+- [ ] Validate both conversion directions against disposable lightweight and annotated tags.
+- [ ] Verify collision, signed-tag, and remote-preflight failures leave refs unchanged.
+- [ ] Verify local, URL-targeted, recovery, and Docker dry-runs create no persistent mutations.
+- [ ] Validate guarded remote replacement against a dedicated non-production repository.
+- [ ] Validate GHCR and GitLab image plans without publishing unless separately approved.
+- [ ] Run final tests, coverage, lint, format, docs, package, Make, Docker, and Compose checks.
+- [ ] Commit, tag, publish, and verify `v1.0.0-rc.1` only with explicit release approval.
+
+### Deferred beyond RC.1
+
+- [ ] Add GitLab release discovery and recovery.
+- [ ] Support explicitly configured custom tag formats without weakening collision or dry-run safeguards.
+- [ ] Validate configured registry image names and destinations before publication.
+- [ ] Complete stable-release cleanup and incorporate only release-blocking RC corrections.
+
+### Notes
+
+- Release recovery retriggers an existing workflow; it does not directly create
+  a GitHub Release page.
+- This snapshot does not claim that any Git tag, release, package, or image was
+  published.
+
+---
+
+## Additional status and roadmap carried from repository TODO files
+
+### Target-project source configuration
+
+- [x] Add `[tool.reflow.project].project_source` resolution for the selected target project's source directory.
+- [x] Support explicit source directories such as `app` and `src` together with automatic resolution.
+- [x] Keep the resolved target-project source separate from repository targeting and Docker image configuration.
+
+### High-priority tag controls
+
+- [ ] Add tag-pattern filtering, such as `--match "v2.*"`, to conversion, release recovery, and Docker publishing.
+- [ ] Add single-tag selection through a reviewed `--tag` option.
+- [ ] Add inclusive tag-range selection for controlled migrations and image recovery.
+- [ ] Expand summaries with processed, successful, skipped, and failed counts.
+- [ ] Add optional Markdown or JSON summary exports.
+- [ ] Continue improving dry-run mapping output without changing its non-mutating contract.
+
+### Versioning and configuration extensions
+
+- [ ] Add explicit custom version mappings without weakening collision checks.
+- [ ] Define conversion-provider or plugin boundaries for custom formats.
+- [ ] Introduce typed configuration models where they improve validation and maintainability.
+- [ ] Consider structured JSON logging in addition to console and file logging.
+
+### Registry and Docker roadmap
+
+- [ ] Evaluate Docker Hub, AWS ECR, Azure ACR, Google Artifact Registry, and Harbor support.
+- [ ] Support reviewed multi-registry publication from one operation.
+- [ ] Evaluate multi-architecture builds through Docker Buildx.
+- [ ] Define safe `latest`-tag behavior.
+- [ ] Evaluate SPDX or CycloneDX SBOM generation.
+
+### Developer and reporting roadmap
+
+- [ ] Consider provider, registry, and version plugin interfaces.
+- [ ] Evaluate asynchronous executors for independent build or push work while preserving deterministic summaries.
+- [ ] Generate optional Markdown, JSON, and CI-artifact reports.
+- [ ] Add end-to-end examples for conversion, release recovery, and Docker publishing.
+- [ ] Add CLI screenshots only when they remain maintainable and useful.
+- [ ] Consider an interactive wizard, a web dashboard, release audit reports, and changelog generation as non-priority ideas.
+
+### Explicitly out of scope
+
+- Kubernetes and Helm deployment.
+- Infrastructure provisioning.
+- Dockerfile, CI/CD pipeline, or general source-code generation.
+
+> Historical roadmap notes used “replay” for release recovery. New work and
+> documentation should use the canonical `reflow releases recover` terminology.
+
 ### 🧠 Planned
 
 #### 🚀 v1.0.0 release preparation
@@ -133,7 +305,7 @@ fix why app error when run the command
 
 ## 🧾 Notes
 
-### TODO.md
+### Reflow TODO Tracking History — v1.0.0-rc.1.md
 
 Keep this file concise, status-driven, and updated during each milestone.
 

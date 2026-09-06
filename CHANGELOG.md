@@ -14,13 +14,43 @@ Unreleased
 
 **Summary**
 
-Correct Reflow's GitHub release-note generation so reviewed annotated tag
-messages, release metadata, and Docker usage render as documentation instead of
-being interpreted by the workflow shell.
+Promote the cumulative Reflow 1.0 work to its first release candidate after
+reviewing the four untagged development checkpoints and the final release
+boundaries.
 
-This is an untagged development checkpoint after the repository-metadata
-maintenance checkpoint. It hardens release presentation without changing the
-Reflow CLI, GitLab publication behavior, package version, or release tag.
+### 🚀 Releases
+
+- Replace the unquoted Markdown heredoc with explicit `printf` output so inline
+- Preserve the complete annotated tag message as the primary GitHub Release
+- Populate the version, release type, repository, commit, and workflow fields
+
+#### Rc
+
+- Keep the public command hierarchy centered on `reflow init`,
+- Keep SemVer as the default conversion destination, with explicit PEP 440
+- Preserve visible target plans, live confirmation, atomic local or remote tag
+- Preserve local-path and repository-URL targeting, managed temporary clones,
+- Preserve exact prerelease images, stable-only `latest`, dynamic provider
+- Publish the protected RC package as `git-reflow==1.0.0rc1`; keep
+- Keep `reflow tags replay` only as a deprecated compatibility alias for
+
+### Docker Guidance
+
+- Publish concise commands for pulling the exact release image and verifying
+- Keep prerelease images on their exact tag and explain that only stable
+- Prevent Docker pulls, layer progress, and runner output from executing or
+
+### Regression Protection And Validation
+
+- Extend the container-workflow regression test to reject the unsafe heredoc
+- Pass the focused workflow tests and the complete suite: 365 tests with 92%
+- Pass targeted Ruff, Black, whitespace, end-of-file, and diff checks.
+
+### Scope
+
+- Keep GitLab's already escaped release-note generation unchanged.
+- Keep this checkpoint untagged; it becomes part of the cumulative
+- Do not change application commands, configuration, package metadata, Docker
 
 ### 📚 Documentation
 
@@ -242,33 +272,27 @@ Reflow CLI, GitLab publication behavior, package version, or release tag.
 - The console entrypoint moves from `app.cli:app` to `app.cli.main:main`.
 - Internal CLI, core, service, executor, configuration, UI, and extension module paths have changed substantially.
 
-### 🚀 Releases
+### Checkpoint Lineage
 
-- Replace the unquoted Markdown heredoc with explicit `printf` output so inline
-- Preserve the complete annotated tag message as the primary GitHub Release
-- Populate the version, release type, repository, commit, and workflow fields
+#### Rc
 
-### Docker Guidance
+- Carry forward checkpoint 1's CLI redesign, repository targeting,
+- Carry forward checkpoint 2's private GitLab Python distribution, canonical
+- Carry forward checkpoint 3's optional repository-metadata synchronization
+- Carry forward checkpoint 4's safe GitHub release-note rendering, populated
 
-- Publish concise commands for pulling the exact release image and verifying
-- Keep prerelease images on their exact tag and explain that only stable
-- Prevent Docker pulls, layer progress, and runner output from executing or
+### Rc Readiness Boundary
 
-### Regression Protection And Validation
+#### Rc
 
-- Extend the container-workflow regression test to reject the unsafe heredoc
-- Pass the focused workflow tests and the complete suite: 365 tests with 92%
-- Pass targeted Ruff, Black, whitespace, end-of-file, and diff checks.
-
-### Scope
-
-- Keep GitLab's already escaped release-note generation unchanged.
-- Keep this checkpoint untagged; it becomes part of the cumulative
-- Do not change application commands, configuration, package metadata, Docker
+- Re-run the complete test, lint, formatting, pre-commit, packaging,
+- Confirm the selected repository targets, package metadata, image
+- Keep release recovery limited to GitHub release discovery; GitLab recovery
+- Treat fixes discovered during RC review as release-blocking until they are
 
 **Tags**
 
-release • feature • bugfix • docs • breaking-change • tests • ci • build • github-actions • release-notes • docker • markdown
+release • feature • bugfix • docs • breaking-change • tests • ci • build • rc
 
 ## v0.1.0 (2026-08-28)
 

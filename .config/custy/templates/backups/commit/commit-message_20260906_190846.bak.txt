@@ -1,0 +1,67 @@
+release(rc): promote Reflow v1.0.0-rc.1
+
+Promote the cumulative Reflow 1.0 work to its first release candidate after
+reviewing the four untagged development checkpoints and the final release
+boundaries.
+
+### 📚 Checkpoint lineage
+
+- Carry forward checkpoint 1's CLI redesign, repository targeting,
+  bidirectional tag conversion, GitHub release recovery, Docker workflows,
+  layered architecture, dry-run safety, GitHub and GitLab CI/CD corrections,
+  container safeguards, build-version resolution, delivery regression tests,
+  Make workflows, and documentation.
+- Carry forward checkpoint 2's private GitLab Python distribution, canonical
+  PEP 440 package metadata, protected-tag package-publication boundary,
+  validation-only unprotected tags, and immutable artifact verification.
+- Carry forward checkpoint 3's optional repository-metadata synchronization
+  helper and README/TODO maintenance, while keeping that helper outside the
+  installed Reflow CLI and automated release workflow.
+- Carry forward checkpoint 4's safe GitHub release-note rendering, populated
+  release metadata, literal Docker examples, and regression protection.
+
+### ✅ Release-candidate promotion
+
+- Keep the public command hierarchy centered on `reflow init`,
+  `reflow tags convert local`, `reflow tags convert remote`,
+  `reflow releases recover`, and `reflow dockerize`.
+- Keep SemVer as the default conversion destination, with explicit PEP 440
+  conversion through `--to pep440`.
+- Preserve visible target plans, live confirmation, atomic local or remote tag
+  replacement, signed-tag and collision guards, and consistent dry-run
+  simulation.
+- Preserve local-path and repository-URL targeting, managed temporary clones,
+  concise CLI errors, configurable progress, and target-aware Docker builds.
+- Preserve exact prerelease images, stable-only `latest`, dynamic provider
+  registry destinations, complete annotated-tag release notes, and validated
+  package/tag version agreement.
+- Publish the protected RC package as `git-reflow==1.0.0rc1`; keep
+  unprotected tag pipelines validation-only.
+- Keep `reflow tags replay` only as a deprecated compatibility alias for
+  `reflow releases recover`.
+
+### 🧪 RC readiness boundary
+
+- Re-run the complete test, lint, formatting, pre-commit, packaging,
+  documentation, CLI-help, dry-run, Docker, Compose, and workflow checks
+  against the exact RC commit before creating the annotated tag.
+- Confirm the selected repository targets, package metadata, image
+  destinations, tag message, and release links before publication.
+- Keep release recovery limited to GitHub release discovery; GitLab recovery
+  and arbitrary custom version formats remain future work.
+- Treat fixes discovered during RC review as release-blocking until they are
+  documented and validated.
+
+Tag: v1.0.0-rc.1
+Previous release: v0.1.0
+Checkpoints:
+- commit-message-v1.0.0-development-checkpoint.txt
+- commit-message-v1.0.0-development-checkpoint-2.txt
+- commit-message-v1.0.0-development-checkpoint-3.txt
+- commit-message-v1.0.0-development-checkpoint-4.txt
+
+🔖 **Tags**:
+- Type: `#release`, `#validation`
+- Delivery: `#release-candidate`, `#semver`, `#github`, `#gitlab`
+- Product: `#release-recovery`, `#tag-conversion`, `#docker`, `#repository-targeting`
+- Safety: `#dry-run`, `#atomic-tags`, `#annotated-tags`, `#stable-latest`

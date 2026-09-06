@@ -293,9 +293,6 @@ Common directories include:
 │   ├── Installation.md
 │   ├── project_structure.md
 │   ├── TODO_tracking_history.md
-│   ├── TODO_tracking_history_before release_copy.md
-│   ├── TODO_tracking_history_v1.0.0-rc.1.md
-│   ├── TODO_tracking_history_v1.0.0.md
 │   └── usage.md
 ├── htmlcov/ ... (collapsed)
 ├── logs/ ... (collapsed)
