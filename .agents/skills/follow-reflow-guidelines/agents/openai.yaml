@@ -1,0 +1,4 @@
+interface:
+  display_name: "Reflow Project Guidelines"
+  short_description: "Follow Reflow project rules and safe workflow"
+  default_prompt: "Use $follow-reflow-guidelines to work safely and consistently in the Reflow repository."

@@ -32,8 +32,8 @@ Deliver a **clean, maintainable, production-ready CLI tool**.
 
 Example:
 
-❌ Scanner should NOT handle CLI  
-❌ CLI should NOT handle filesystem logic  
+❌ Scanner should NOT handle CLI
+❌ CLI should NOT handle filesystem logic
 
 ---
 

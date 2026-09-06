@@ -1,0 +1,25 @@
+flowchart TD
+    User[User invokes Reflow] --> CLI[Global CLI]
+    CLI -->|--repository or --repository-url| Resolver[Repository resolver]
+    Config[.config/reflow/config.toml] -->|repository.path or repository.url| Resolver
+    Resolver --> Target[Validated RepositoryTarget]
+
+    Target --> Kind{Target kind}
+    Kind -->|Local| Local[Existing checkout]
+    Kind -->|Remote| Clone[Temporary git clone]
+    Clone --> Cleanup[Guaranteed cleanup]
+    Local --> Materialized[Materialized local path]
+    Clone --> Materialized
+
+    Materialized --> Git[Git executor cwd]
+    Materialized --> GH[GitHub CLI cwd]
+    Materialized --> Docker[Docker source repository]
+    Kind -->|Local only| Init[Initialization root]
+    Kind -->|Remote rejected| InitError[Clear configuration error]
+
+    Git --> Convert[Convert local tags]
+    Git --> Recover[Recover missing releases]
+    Git --> Snapshot[Temporary tagged worktree]
+    GH --> Recover
+    Snapshot --> Docker
+    Docker --> Registry[GHCR / GitLab Registry]

@@ -1,190 +1,192 @@
 # .github/workflows/release.yml
 
-name: Create GitHub Release
+name: 🚀 Release
 
-# =========================================================
-# 📦 GitHub Release Automation
-# ---------------------------------------------------------
-# Trigger:
-# - Runs when pushing version tags
-#   Example:
-#     git push origin v1.2.3
-#
-# Responsibilities:
-# - Detect version type (alpha, beta, rc, stable)
-# - Extract tag message
-# - Generate release notes
-# - Attach artifacts
-# - Publish GitHub Release
-#
-# Important:
-# - Works with SemVer & PEP 440-style tags
-# =========================================================
+run-name: 🚀 Release • ${{ inputs.tag || github.ref_name }}
+
+# Build package artifacts and create a GitHub Release from an existing,
+# non-empty annotated SemVer tag. The annotated tag message is the public
+# release description.
 
 on:
   push:
     tags:
-      - "v*.*.*" # Matches v1.2.3, v1.2.3-alpha.1, etc.
-      - "v*.*.*-alpha.*"
-      - "v*.*.*-beta.*"
-      - "v*.*.*-rc.*"
-      - "v*.*.*-dev.*"
-      - "v*.*.*-post.*"
+      - "v*"
+
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag, such as v1.0.0 or v1.0.0-rc.1
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  packages: read
+
+env:
+  RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
 
 jobs:
   release:
-    name: 📦 Create Release
+    name: 🚀 Create Release
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: write
-
     steps:
-      # 📥 Checkout repo (with tags)
-      - name: 📥 Checkout
+      - name: 📥 Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # ✅ Required for tag metadata
+          fetch-depth: 0
+          ref: ${{ inputs.tag || github.ref }}
 
-      # 🛑 VALIDATION
-      - name: 🛑 Validate version tag
-        id: validate
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+          cache: pip
+
+      - name: 🏷️ Validate annotated release tag
+        id: version
+        shell: bash
         run: |
-          RAW_TAG=${GITHUB_REF#refs/tags/}
+          python -m pip install --disable-pip-version-check packaging
 
-          echo "🔍 Validating tag: $RAW_TAG"
+          TAG_REGEX='^v[0-9]+\.[0-9]+\.[0-9]+([.-](alpha|beta|rc|dev|post)\.[0-9]+)?(\+[0-9A-Za-z.]+)?$'
+          TAG="$RELEASE_TAG"
 
-          # Strict SemVer with pre-release support
-          REGEX="^v([0-9]+)\.([0-9]+)\.([0-9]+)(-(alpha|beta|rc|dev|post)\.[0-9]+)?$"
-          # REGEX='^v[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.]+)?(\+[0-9A-Za-z.]+)?$'
-
-          if [[ ! "$RAW_TAG" =~ $REGEX ]]; then
-            echo "❌ Invalid tag format: $RAW_TAG"
-            echo "✅ Expected formats:"
-            echo "   v1.2.3"
-            echo "   v1.2.3-alpha.1"
-            echo "   v1.2.3-beta.1"
-            echo "   v1.2.3-rc.1"
-            echo "   v1.2.3-dev.1"
-            echo "   v1.2.3-post.1"
+          if [[ ! "$TAG" =~ $TAG_REGEX ]]; then
+            echo "Invalid Reflow release tag: $TAG" >&2
             exit 1
           fi
 
-          echo "✅ Tag is valid"
-      
-      - name: 🧠 Extract version parts
-        id: version
-        run: |
-          RAW_TAG=${GITHUB_REF#refs/tags/}
-
-          # Normalize tag by removing optional "v" prefix
-          # (e.g., "v1.2.3" → "1.2.3") for PEP 440 compliance
-          VERSION=${RAW_TAG#v}
-
-          echo "🔍 Raw tag: $RAW_TAG"
-          echo "🔍 Version: $VERSION"
-
-          # Split base + suffix
-          BASE_VERSION=$(echo "$VERSION" | cut -d'-' -f1)
-          SUFFIX=$(echo "$VERSION" | cut -s -d'-' -f2)
-
-          # Extract MAJOR.MINOR.PATCH
-          IFS='.' read -r MAJOR MINOR PATCH <<< "$BASE_VERSION"
-
-          # -------------------------------------------------
-          # Detect release type (SemVer / PEP440 compatible)
-          # -------------------------------------------------
-          TYPE="stable"
-          if [[ "$SUFFIX" == alpha* ]]; then
-            TYPE="alpha"
-          elif [[ "$SUFFIX" == beta* ]]; then
-            TYPE="beta"
-          elif [[ "$SUFFIX" == rc* ]]; then
-            TYPE="rc"
-          elif [[ "$SUFFIX" == dev* ]]; then
-            TYPE="dev"
-          elif [[ "$SUFFIX" == post* ]]; then
-            TYPE="post"
+          if ! git show-ref --verify --quiet "refs/tags/$TAG"; then
+            echo "Release tag does not exist in the repository: $TAG" >&2
+            exit 1
           fi
 
-          # Export outputs
-          echo "tag=$RAW_TAG" >> $GITHUB_OUTPUT
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "base=$BASE_VERSION" >> $GITHUB_OUTPUT
+          if [[ "$(git cat-file -t "refs/tags/$TAG")" != "tag" ]]; then
+            echo "GitHub Releases require an annotated Git tag: $TAG" >&2
+            exit 1
+          fi
 
-          echo "major=$MAJOR" >> $GITHUB_OUTPUT
-          echo "minor=$MINOR" >> $GITHUB_OUTPUT
-          echo "patch=$PATCH" >> $GITHUB_OUTPUT
+          TAG_MESSAGE="$(git tag -l --format='%(contents)' "$TAG")"
+          if [[ -z "${TAG_MESSAGE//[[:space:]]/}" ]]; then
+            echo "Annotated release tag has an empty message: $TAG" >&2
+            exit 1
+          fi
 
-          echo "suffix=$SUFFIX" >> $GITHUB_OUTPUT
-          echo "type=$TYPE" >> $GITHUB_OUTPUT
+          BUILD_VERSION="$(python -m app.core.build.version)"
+          EXPECTED_VERSION="$(python -c 'from packaging.version import Version; import sys; print(Version(sys.argv[1].removeprefix("v")).public)' "$TAG")"
 
-          echo "✅ Extracted:"
-          echo "  - MAJOR=$MAJOR"
-          echo "  - MINOR=$MINOR"
-          echo "  - PATCH=$PATCH"
-          echo "  - TYPE=$TYPE"
+          if [[ -z "$BUILD_VERSION" || "$BUILD_VERSION" != "$EXPECTED_VERSION" ]]; then
+            echo "Resolved package version '$BUILD_VERSION' does not match release tag '$TAG' ('$EXPECTED_VERSION')." >&2
+            exit 1
+          fi
 
-      # 🔤 Normalize image name
+          VERSION="${TAG#v}"
+          TYPE="stable"
+
+          case "$VERSION" in
+            *alpha*) TYPE="alpha" ;;
+            *beta*) TYPE="beta" ;;
+            *rc*) TYPE="rc" ;;
+            *dev*) TYPE="dev" ;;
+            *post*) TYPE="post" ;;
+          esac
+
+          PRERELEASE=false
+          if [[ "$TYPE" != "stable" && "$TYPE" != "post" ]]; then
+            PRERELEASE=true
+          fi
+
+          IMAGE_TAG="${TAG//+/-}"
+
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "image_tag=$IMAGE_TAG" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "type=$TYPE" >> "$GITHUB_OUTPUT"
+          echo "prerelease=$PRERELEASE" >> "$GITHUB_OUTPUT"
+
+      - name: 🧠 Build release title
+        id: title
+        shell: bash
+        run: |
+          TYPE="${{ steps.version.outputs.type }}"
+          TAG="${{ steps.version.outputs.tag }}"
+          TITLE="🚀 Release"
+
+          case "$TYPE" in
+            alpha) TITLE="🧪 Alpha Release" ;;
+            beta) TITLE="🔬 Beta Release" ;;
+            rc) TITLE="🚧 Release Candidate" ;;
+            dev) TITLE="🛠️ Development Release" ;;
+            post) TITLE="📦 Post Release" ;;
+          esac
+
+          echo "title=$TITLE $TAG" >> "$GITHUB_OUTPUT"
+
+      - name: 📦 Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .[dev]
+
+      - name: 🧪 Run validation workflow
+        run: make check-ci
+
+      - name: 📦 Build package artifacts
+        run: python -m build
+
       - name: 🔤 Normalize image name
         id: vars
+        shell: bash
         run: |
-          echo "image_name=$(echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+          echo "image_name=${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
 
-      # 📝 Extract tag message
-      - name: 📝 Extract tag message
+      - name: 📝 Generate release notes
         id: notes
+        shell: bash
         run: |
-          NOTES=$(git for-each-ref refs/tags/${{ steps.version.outputs.tag }} --format='%(contents)')
+          TAG="${{ steps.version.outputs.tag }}"
+          VERSION="${{ steps.version.outputs.version }}"
+          TYPE="${{ steps.version.outputs.type }}"
+          IMAGE_TAG="${{ steps.version.outputs.image_tag }}"
+          COMMIT_SHA="$(git rev-parse HEAD)"
 
-          # Fallback if tag message is empty
-          if [ -z "$NOTES" ]; then
-            NOTES="Release ${{ steps.version.outputs.tag }}"
-          fi
+          git tag -l --format='%(contents)' "$TAG" > RELEASE_NOTES.md
 
-          echo "notes<<EOF" >> $GITHUB_OUTPUT
-          echo "$NOTES" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          cat <<EOF >> RELEASE_NOTES.md
 
-      # 📦 Create example artifact
-      - name: 📦 Create artifact (example)
-        run: |
-          mkdir dist
-          echo "Example artifact for ${{ steps.version.outputs.tag }}" > dist/info.txt
-          zip -r release.zip dist/
+          ---
 
-      # 🧠 Build release body
-      - name: 🧠 Build release body
-        id: body
-        run: |
-          IMAGE="ghcr.io/${{ steps.vars.outputs.image_name }}:${{ steps.version.outputs.version }}"
+          ## 📅 Release Information
 
-          printf "## 🚀 %s\n\n%s\n\n---\n\n### 🐳 Docker Image\n\`\`\`bash\ndocker pull %s\n\`\`\`\n\n---\n\n### 📦 Artifacts\n- Attached below\n\n---\n\n### ℹ️ Info\n- Version: %s\n- Type: %s\n" \
-            "${{ steps.version.outputs.tag }}" \
-            "${{ steps.notes.outputs.notes }}" \
-            "$IMAGE" \
-            "${{ steps.version.outputs.version }}" \
-            "${{ steps.version.outputs.type }}" \
-            > release_body.md
+          - Version: `$VERSION`
+          - Release Type: `$TYPE`
+          - Repository: `${{ github.repository }}`
+          - Commit: `$COMMIT_SHA`
+          - Workflow: `${{ github.workflow }}`
 
-      - name: 🚀 Create GitHub Release
+          ## 🐋 Docker Image
+
+          ```bash
+          docker pull ghcr.io/${{ steps.vars.outputs.image_name }}:$IMAGE_TAG
+          ```
+
+          ## 📥 Python Package
+
+          Artifacts are attached to this release.
+          EOF
+
+          echo "notes_path=RELEASE_NOTES.md" >> "$GITHUB_OUTPUT"
+
+      - name: 🚀 Create GitHub release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.version.outputs.tag }}
-          name: |
-            ${{ steps.version.outputs.type == 'dev' && '🛠️ Dev Release' || '' }}
-            ${{ steps.version.outputs.type == 'alpha' && '🧪 Alpha Release' || '' }}
-            ${{ steps.version.outputs.type == 'beta' && '🔬 Beta Release' || '' }}
-            ${{ steps.version.outputs.type == 'rc' && '🚧 RC Release' || '' }}
-            ${{ steps.version.outputs.type == 'post' && '📦 Post Release' || '' }}
-            ${{ steps.version.outputs.type == 'stable' && '🚀 Release' || '' }}
-            ${{ steps.version.outputs.tag }}
-          body_path: release_body.md
-          prerelease: ${{ steps.version.outputs.type == 'dev' || steps.version.outputs.type == 'alpha' || steps.version.outputs.type == 'beta' || steps.version.outputs.type == 'rc' }}
-          files: release.zip
-
-          # Additionally options
-          ## generate_release_notes: true
-          ## append_body: true
+          name: ${{ steps.title.outputs.title }}
+          body_path: ${{ steps.notes.outputs.notes_path }}
+          prerelease: ${{ steps.version.outputs.prerelease }}
+          files: |
+            dist/*.whl
+            dist/*.tar.gz
           make_latest: ${{ steps.version.outputs.type == 'stable' }}
-          fail_on_unmatched_files: false

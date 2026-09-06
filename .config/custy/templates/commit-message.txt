@@ -1,0 +1,218 @@
+feat(reflow)!: checkpoint the Reflow 1.0 redesign foundation
+
+Checkpoint the Reflow 1.0 redesign foundation, consolidating the major
+CLI, repository-targeting, version-conversion, release-recovery, Docker,
+architecture, safety, testing, tooling, and documentation changes developed
+after v0.1.0.
+
+This untagged checkpoint prepares Reflow's first 1.0 release candidate by
+evolving the small, current-directory-oriented Git automation script into a
+structured release-workflow toolkit. The new
+foundation makes operations clearer and safer for users while giving
+contributors focused components that are easier to locate, test, debug,
+maintain, replace, and extend.
+
+### ✨ Features
+
+#### CLI and release workflows
+
+- Reorganized the Typer CLI around the focused `reflow init`, `reflow tags convert local`, `reflow tags convert remote`, `reflow releases recover`, and `reflow dockerize` commands.
+- Added Rich banners, panels, tables, configurable spinners and determinate progress bars, confirmations, summaries, and clearer error reporting across command workflows.
+- Added global repository, dry-run, debug, log-level, banner, version, help, and completion controls.
+- Added `reflow releases recover` as the outcome-oriented command for finding tags without corresponding GitHub Releases and re-pushing those remote tags to retrigger tag-based CI/CD automation.
+- Retained `reflow tags replay` as a deprecated compatibility alias that directs users to `reflow releases recover`.
+
+#### Repository targeting
+
+- Added explicit local repository targeting through `--repository`, `--repo`, and `-C`.
+- Added direct Git URL targeting through `--repository-url` for HTTPS, SSH, Git-protocol, and SCP-style repository URLs.
+- Added `[tool.reflow.repository]` configuration with mutually exclusive `path` and `url` targets plus configurable Git remote selection.
+- Added managed temporary clones for URL targets, including cleanup after successful and failed commands.
+- Applied the selected repository consistently to tag conversion, release recovery, and Docker publishing instead of implicitly operating on the Reflow source checkout.
+- Kept `reflow init` local-only so generated configuration and project files remain available after initialization.
+
+#### Version-tag conversion
+
+- Rebuilt tag conversion around explicit local and remote scopes with one collision-aware replacement plan.
+- Added bidirectional conversion between PEP 440 and Semantic Versioning with SemVer as the default destination and `--to pep440` for reverse conversion.
+- Added source-to-destination previews, skipped-tag reasons, target-repository details, live confirmation, and `--yes`/`-y` support for reviewed automation.
+- Preserved lightweight-tag targets and annotated-tag target objects, tagger identities, timestamps, timezones, messages, and encoding metadata under the converted names.
+- Added all-or-nothing local reference transactions and guarded atomic remote pushes that replace source names without leaving additive duplicates in the selected scope.
+- Added safe handling for already-conforming and unsupported tags, complete-plan collision blocking, signed-tag rejection, remote preflight checks, no-op plans, and post-operation verification.
+
+#### Release recovery and Docker publishing
+
+- Added GitHub release discovery through the GitHub CLI before selecting tags for recovery.
+- Added stable-only filtering, result limits, configurable delays, confirmation, dry-run previews, and per-tag recovery summaries.
+- Kept recovery workflow-driven: Reflow re-pushes selected tags to retrigger existing release automation instead of creating GitHub Releases directly.
+- Reworked Docker publishing to build, tag, push, and clean images from the selected repository's tags and build context.
+- Retained configurable GitHub Container Registry, GitLab Container Registry, and combined provider modes.
+- Added repository and Docker configuration output so users can verify both the source checkout and destination image names before execution.
+- Added structured per-image Docker failure records, partial-publication accounting, nonzero failure exits, and provider-specific configuration output.
+
+#### Configuration and initialization
+
+- Replaced the flat `.reflow.toml` configuration with the namespaced `.config/reflow/config.toml` schema and packaged defaults under `app/templates`.
+- Added consistent CLI → configuration → internal-default resolution for execution, repository, initialization, conversion, recovery, Docker, Git, and logging settings.
+- Expanded initialization into focused builders, models, registries, services, and presenters with force and confirmation controls.
+- Added rotating file logging alongside configurable Rich console logging.
+
+### 🧠 Improvements
+
+#### User experience and safety
+
+- Made the active local path or remote URL visible before operational workflows begin.
+- Added explicit previews and confirmations before live tag conversion or remote release-recovery changes.
+- Standardized dry-run behavior so read-only discovery and temporary workspace setup may run while persistent local, remote, and Docker mutations are simulated.
+- Kept `tags convert local` strictly local and made `tags convert remote` the explicit opt-in to one guarded atomic remote replacement.
+- Improved command help, option descriptions, failure summaries, skipped-item explanations, and troubleshooting guidance.
+- Clarified the separate roles of repository targeting and container-image destination configuration.
+- Added actionable `path`/`url` conflict errors while keeping root and nested `--help` available during configuration repair.
+- Added `[tool.reflow.cli.progress]` control for remote-clone activity, conversion stages, release recovery, Docker publishing, and initialization without changing execution semantics.
+- Centralized CLI exception boundaries so expected operational failures show concise remediation, unexpected failures stay in debug logs, and normal output no longer emits duplicate tracebacks.
+
+#### Developer experience
+
+- Added a modular Make workflow for setup, local commands, tests, linting, formatting, QA, CI, documentation, builds, Docker, Compose, remote-image execution, Git helpers, and cleanup.
+- Added reusable dry-run Make targets for every supported mutating Reflow workflow and delegated legacy replay helpers to the deprecated alias.
+- Added development and production Docker Compose configurations plus current local and published image naming.
+- Expanded project metadata and development dependencies for Pytest coverage, Ruff, Black, build, Twine, pre-commit, and MkDocs.
+- Kept Python 3.14 or newer as the supported runtime and aligned formatter and linter targets with Python 3.14.
+
+### 🧠 Refactoring
+
+- Replaced the former monolithic `app/cli.py` entrypoint with command, option, model, resolver, constants, help, and utility modules under `app/cli`.
+- Separated orchestration from external execution through focused Git, GitHub, Docker, repository, initialization, dry-run, and task-execution components.
+- Added service, executor, protocol, and factory boundaries for Git, GitHub, and Docker integrations.
+- Added typed repository targets, shared results, domain exceptions, and execution context models.
+- Separated terminal presentation into reusable banner, console, panel, progress, table, exception, and theme components.
+- Reduced cross-command coupling so repository selection, configuration resolution, presentation, orchestration, and external commands can be tested independently.
+
+### 🐛 Bug Fixes
+
+- Fixed operational commands mutating the Reflow source repository when a different target repository was configured.
+- Fixed local and URL targets so Git and Docker commands execute from the materialized target checkout.
+- Fixed annotated-tag creation failures caused by argument ordering and message-file handling.
+- Fixed repeated conversion of existing SemVer tags into malformed tag names.
+- Fixed tag collision handling so an existing destination blocks the complete replacement plan instead of being overwritten or allowing a partial conversion.
+- Fixed converted tags so they retain the original tag's commit target and tag message.
+- Fixed conversion summaries to distinguish successful, skipped, failed, and no-op outcomes accurately.
+- Closed dry-run side-effect gaps across tag conversion, release recovery, Docker build/tag/push/cleanup, and initialization workflows.
+- Added cleanup guarantees for temporary remote workspaces after command success or failure.
+- Fixed ambiguous repository configuration failures so they return a corrective CLI error without exposing an internal traceback.
+- Fixed command-specific help so invalid operational configuration does not prevent users from reading remediation and migration guidance.
+- Fixed progress rendering for Windows consoles that cannot encode Unicode completion markers.
+
+### 🧪 Tests
+
+- Expanded the original two tag-validation tests into dedicated CLI, configuration, core, service, repository, initialization, dry-run, UI, theme, and developer-workflow test modules.
+- Added coverage for local-path and remote-URL target resolution, temporary clone lifecycle, command-context propagation, and invalid target combinations.
+- Added conversion coverage for PEP 440 and SemVer directions, lightweight and annotated metadata preservation, signed tags, collisions, local transactions, guarded atomic remote pushes, confirmation, and dry-run behavior.
+- Added release-recovery coverage for GitHub release discovery, filtering, limits, confirmation, deprecated alias behavior, failures, and simulated remote operations.
+- Added Docker service, executor, factory, orchestration, and dry-run coverage.
+- Added deterministic Docker CLI configuration fixtures so the full test suite passes in a fresh checkout before `reflow init`, without depending on a user-managed `.config/reflow/config.toml`.
+- Added regression coverage for configuration precedence, initialization, shared exceptions and results, command versions, banner behavior, and the modular Make interface.
+- Added reusable progress-helper, remote-clone visibility, configured progress suppression, nested-help, actionable configuration-error, and Windows-safe CLI regression coverage.
+
+### 📚 Documentation
+
+- Reworked the README around the current release-recovery, tag-conversion, repository-targeting, and Docker workflows.
+- Added MkDocs navigation and focused user, command, configuration, installation, infrastructure, testing, developer, and architecture guides.
+- Added command documentation for initialization, tag conversion, release recovery, the deprecated replay alias, and Docker publishing.
+- Added repository-targeting architecture and Mermaid diagrams for the application layers, workflows, lifecycle, initialization, conversion, recovery, and Docker publishing.
+- Added a dedicated Q&A and troubleshooting section covering local versus URL targets, temporary clones, authentication, remote effects, duplicate-looking converted tags, confirmations, dry-run, and registry destinations.
+- Added configuration, usage, examples, and Q&A guidance for progress visibility and non-interactive output.
+- Clarified that release recovery currently inspects GitHub Releases, retriggers existing CI/CD, and does not create a release page directly.
+
+### ⚙️ CI/CD and Distribution
+
+- Added GitHub Actions and GitLab CI definitions for validation, development and production containers, and release workflows.
+- Added pre-commit, Ruff, Black, Pytest coverage, packaging, and documentation tooling.
+- Added development and production Docker images and Docker Compose workflows.
+- Added dynamic package versions through `setuptools-scm` with SemVer-oriented Git tags as the release source of truth.
+
+### 🔧 Hosted Delivery Hardening
+
+- Run validation for supported branches, pull or merge requests, and stable or
+  prerelease version tags.
+- Build development and production containers from the root multi-stage
+  Dockerfile with explicit targets and resolved package-version build arguments.
+- Derive provider image names from the active repository so forks and temporary
+  validation repositories do not publish to a hardcoded production namespace.
+- Require an existing non-empty annotated SemVer tag before production images
+  or provider releases can run.
+- Publish the exact stable or prerelease image tag and update `latest` only for
+  stable releases.
+- Preserve the complete annotated tag message as the GitHub or GitLab Release
+  description.
+- Validate that the resolved Python package version agrees with the selected
+  release tag before publication.
+- Correct GitLab job labels, Dockerfile paths, tag rules, artifact retention,
+  job dependencies, and release-note links.
+
+### 🧰 Build and Quality Alignment
+
+- Add a read-only, shell-free Git build-version resolver for Docker contexts
+  that intentionally exclude `.git` metadata.
+- Pass the resolved version into root Docker and Compose builds instead of
+  allowing packaged applications to fall back to an unrelated version.
+- Root-anchor generated build and backup ignore rules without hiding the
+  tracked build-version package.
+- Pin Ruff and Black consistently across project dependencies and pre-commit
+  hooks, then apply the corresponding safe formatting and lint corrections.
+- Make CLI help assertions and hosted output checks deterministic across
+  terminal widths and ANSI-capable runners.
+
+### 🧪 Delivery Tests and Documentation
+
+- Add regression coverage for build-version normalization, shell-free Git
+  discovery, dynamic registry naming, annotated-tag enforcement, prerelease
+  handling, stable-only `latest`, and root Dockerfile usage.
+- Document the branch, tag, container, release, and `latest` contracts for
+  contributors and release maintainers.
+- Record the untagged checkpoint → RC.1 commit and tag → stable commit and tag
+  sequence.
+- Keep local validation non-publishing; these message templates do not create a
+  tag, package, image, or provider release.
+
+### 🧭 Checkpoint Ownership
+
+Checkpoint 1 owns the complete product foundation and the general CI/CD, build,
+quality, testing, compatibility, and documentation work above. Checkpoint 2
+owns private GitLab Python distribution and its package-publication safeguards.
+Checkpoint 3 owns the optional repository-metadata helper and related README and
+TODO maintenance. All three checkpoints remain untagged; RC.1 promotes their
+combined result.
+
+The validation statements in this checkpoint are historical development
+records. They are not a substitute for checks against the exact RC or stable
+release commit.
+
+### ⚠️ Breaking Changes
+
+- Configuration moves from `.reflow.toml` to `.config/reflow/config.toml` and uses the new `[tool.reflow.*]` namespaced schema.
+- The former top-level `reflow convert-tags` command is replaced by the explicit `reflow tags convert local` and `reflow tags convert remote` scopes.
+- The former top-level `reflow replay-tags` workflow is replaced by `reflow releases recover`; `reflow tags replay` remains only as a deprecated compatibility alias.
+- Tag conversion no longer uses additive `--push` or `--delete-old` controls. Choose `local` for one local reference transaction or `remote` for one guarded atomic remote replacement after reviewing the plan.
+- Operational commands can target a configured local path or remote URL instead of always using the invocation directory.
+- The console entrypoint moves from `app.cli:app` to `app.cli.main:main`.
+- Internal CLI, core, service, executor, configuration, UI, and extension module paths have changed substantially.
+
+BREAKING CHANGE: Reflow 1.0 introduces a new command hierarchy, namespaced
+configuration schema, repository-targeting model, safer tag-conversion
+defaults, release-recovery terminology, entrypoint, and layered internal
+architecture. Existing v0.1.0 users must generate or migrate configuration,
+update command invocations and automation, and review dry-run output before
+allowing live local or remote changes.
+
+Release target: v1.0.0-rc.1
+Previous release baseline: v0.1.0
+Tag: none; this development checkpoint is intentionally untagged
+
+🔖 **Tags**:
+- Type: `#feature`, `#improvement`, `#refactor`, `#bugfix`
+- Product: `#release-recovery`, `#tag-conversion`, `#docker`, `#repository-targeting`
+- Architecture: `#cli`, `#core`, `#services`, `#executors`, `#configuration`, `#ui`
+- Quality: `#tests`, `#dry-run`, `#logging`, `#developer-experience`
+- Delivery: `#docs`, `#make`, `#ci`, `#docker`, `#release`
+- Stability: `#breaking-change`, `#development-checkpoint`

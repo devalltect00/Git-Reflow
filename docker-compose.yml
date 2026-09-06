@@ -1,0 +1,31 @@
+# docker-compose.yml
+
+name: reflow
+
+services:
+  base:
+    image: reflow-base:latest
+
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: base
+
+    working_dir: /workspace
+
+    volumes:
+      - .:/workspace
+
+      # Docker socket for:
+      #
+      #   reflow dockerize
+      #
+      - /var/run/docker.sock:/var/run/docker.sock
+
+    environment:
+      PYTHONUNBUFFERED: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+      HOST_PWD: ${PWD}
+
+    stdin_open: true
+    tty: true

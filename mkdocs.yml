@@ -1,0 +1,199 @@
+site_name: 🚀 Reflow
+
+site_description: Release Recovery, Version Conversion, and Docker Release Automation.
+
+# site_url: https://your-domain.com
+site_url: http://localhost:8001
+
+site_author: Devalltect00
+
+repo_name: reflow
+repo_url: https://github.com/devalltect00/reflow
+
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  language: en
+
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: lime
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+  font:
+    text: Roboto
+    code: Fira Code
+
+  icon:
+    logo: material/source-branch
+
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.footer
+    - navigation.top
+    - navigation.indexes
+    - toc.integrate
+    - header.autohide
+
+    - content.code.annotate
+    - content.code.copy
+    - content.tabs.link
+    - content.action.edit
+
+    - search.suggest
+    - search.highlight
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - codehilite
+  - md_in_html
+  - tables
+
+  - toc:
+      permalink: true
+
+  - pymdownx.keys
+  - pymdownx.tasklist
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.details
+
+  - pymdownx.tabbed:
+      alternate_style: true
+
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+plugins:
+  - search:
+      lang: en
+
+docs_dir: docs
+site_dir: site
+
+nav:
+  - 🏠 Home:
+      - Overview: index.md
+
+  - 🚀 User Guide:
+      - Overview: user-guide/overview.md
+      - Getting Started: user-guide/getting-started.md
+      - Quick Start: user-guide/quickstart.md
+      - Installation Methods: user-guide/installation-methods.md
+      - Commands: user-guide/commands.md
+      - Lifecycle: user-guide/lifecycle.md
+
+  - 📚 Guides:
+      - Installation: Installation.md
+      - How To Use: how-to-use.md
+      - Command Examples: examples.md
+      - Usage Reference: usage.md
+      - Infrastructure: infrastructure.md
+      - CI/CD: ci-cd.md
+
+  - 🏗️ Initialization:
+      - Overview: commands/init/overview.md
+      - Workflow: commands/init/workflow.md
+      - Examples: commands/init/examples.md
+      - FAQ: commands/init/faq.md
+
+  - 🏷️ Tags:
+      - Convert:
+          - Overview: commands/tags/convert/overview.md
+          - Workflow: commands/tags/convert/workflow.md
+          - Examples: commands/tags/convert/examples.md
+          - FAQ: commands/tags/convert/faq.md
+
+      - Replay (Legacy Alias):
+          - Overview: commands/tags/replay/overview.md
+          - Workflow: commands/tags/replay/workflow.md
+          - Examples: commands/tags/replay/examples.md
+          - FAQ: commands/tags/replay/faq.md
+
+  - 🛟 Releases:
+      - Recover:
+          - Overview: commands/releases/recover/overview.md
+          - Workflow: commands/releases/recover/workflow.md
+
+  - 🐳 Dockerize:
+      - Overview: commands/dockerize/overview.md
+      - Workflow: commands/dockerize/workflow.md
+      - Examples: commands/dockerize/examples.md
+      - FAQ: commands/dockerize/faq.md
+
+  - 👨‍💻 Developer Guide:
+      - Overview: developer-guide/developer-guide.md
+      - Getting Started: developer-guide/getting-started.md
+      - Make Workflows: developer-guide/make-workflows.md
+      - Docker Workflow: developer-guide/docker-workflow.md
+
+  - 🧪 Testing:
+      - Testing Guide: testing/testing-guide.md
+
+  - ❓ Questions and Answers:
+      - Overview: qa/index.md
+      - Repository Targeting: qa/repository-targeting.md
+      - Troubleshooting: qa/troubleshooting.md
+
+  - 🏗️ Architecture:
+      - Workflow: architecture/workflow.md
+      - Repository Targeting: architecture/repository-targeting.md
+      - Design Patterns: architecture/design-pattern.md
+      - Diagrams: architecture/diagrams.md
+
+  - 📊 Diagrams:
+      - Overview: diagrams/README.md
+
+  - 📌 Reference:
+      - Configuration: configuration.md
+      - Badges: badges.md
+
+  - 🗺️ Project:
+      - Roadmap: project/roadmap.md
+
+  - 🔮 Future:
+      - TODO: project/TODO_future.md
+
+extra:
+  generator: false
+
+  homepage: https://github.com/devalltect00/reflow
+
+  social:
+    - icon: simple/github
+      link: https://github.com/devalltect00
+
+    - icon: material/linkedin
+      link: https://www.linkedin.com/in/rizky-purwanto-fernandes/
+
+extra_css:
+  - stylesheets/extra.css
+
+copyright: Copyright © 2026 Devalltect

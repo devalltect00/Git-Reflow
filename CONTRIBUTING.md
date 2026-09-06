@@ -2,9 +2,9 @@
 # 🤝 Contributing Guide
 ---
 
-Thank you for contributing to **Project Structure Generator**.
+Thank you for contributing to **Reflow**.
 
-This project aims to provide a clean, professional CLI tool for generating repository documentation.
+This project aims to provide a clean, professional CLI tool as Release workflow orchestration toolkit.
 
 ---
 
@@ -21,15 +21,23 @@ All contributions must follow:
 
 ## 🧱 Project Architecture
 
-```
-
+```text
 app
-├── cli.py
+├── cli/
+├── config/
+├── constants/
 ├── core/
 ├── services/
+├── templates/
+├── theme/
+├── ui/
 ├── utils/
+├── __init__.py
+├── __version__.py
+└── __main__.py
+```
 
-````
+See full structure in [`project_structure.md`](docs/project_structure.md).
 
 Each module has a **clear responsibility**. Avoid mixing concerns.
 
@@ -55,7 +63,7 @@ def example(arg: str) -> str:
     Raises:
         ValueError: Description
     """
-````
+```
 
 ### 2. File-Level Docstring
 
@@ -90,9 +98,9 @@ logger.error("Error occurred: %s", error)
 
 ### 4. CLI Behavior
 
-* Must be consistent
-* Must not break existing commands
-* Must support config + CLI overrides
+- Must be consistent
+- Must not break existing commands
+- Must support config + CLI overrides
 
 ---
 
@@ -100,8 +108,8 @@ logger.error("Error occurred: %s", error)
 
 (Will be added in future phase)
 
-* Add unit tests for new logic
-* Ensure CLI commands work as expected
+- Add unit tests for new logic
+- Ensure CLI commands work as expected
 
 ---
 
@@ -117,6 +125,6 @@ logger.error("Error occurred: %s", error)
 
 ## 📌 Notes
 
-* Keep commits clean and meaningful
-* Avoid unnecessary complexity
-* Prefer explicit over implicit
+- Keep commits clean and meaningful
+- Avoid unnecessary complexity
+- Prefer explicit over implicit

@@ -1,0 +1,43 @@
+docker run -it --rm -v "%cd%:/workspace" -w /workspace reflow-prod:latest tags replay
+
+docker run -it --rm -v "%cd%:/workspace" -w /workspace ghcr.io/devalltect00/Reflow:latest tags replay
+
+
+docker run -it --rm -v "%cd%:/workspace" -w /workspace ghcr.io/devalltect00/Custy:latest
+docker run -it --rm -v "%cd%:/workspace" -w /workspace custy-prod:latest
+============
+
+reflow tags convert --delete-old
+reflow tags convert --delete-old --to pep440
+reflow tags convert --delete-old --to pep440 -y
+
+reflow --repository-url https://github.com/acme/project.git tags convert --push --yes
+reflow --repository-url https://github.com/devalltect00/testing_reflow.git tags convert --delete-old --to pep440 -y --push
+reflow --repository-url https://github.com/devalltect00/testing_reflow.git tags convert --delete-old --to semver -y --push
+
+===============
+
+# Local tag conversion
+reflow -C D:/project/testing_lab/testing_reflow tags convert local --to pep440 --yes
+
+# Remote tag conversion from a local checkout
+reflow -C D:/project/testing_lab/testing_reflow tags convert remote --to pep440 --yes
+
+# Remote conversion using a GitHub URL
+reflow --repository-url https://github.com/devalltect00/testing_reflow.git tags convert remote --to pep440 --yes
+
+===============
+
+git fetch origin --prune --prune-tags
+
+===============
+
+docker run -it --rm -v "%cd%:/workspace" -w /workspace path-header-scanner-prod:latest init --force
+docker run -it --rm -v "%cd%:/workspace" -w /workspace doc-gen-prod:latest init --force
+docker run -it --rm -v "%cd%:/workspace" -w /workspace reflow-prod:latest init
+docker run -it --rm -v "%cd%:/workspace" -w /workspace custy-prod:latest init
+
+docker run -it --rm -v "%cd%:/workspace" -w /workspace path-header-scanner-prod:latest scan app --apply
+docker run -it --rm -v "%cd%:/workspace" -w /workspace path-header-scanner-prod:latest scan tests --apply
+
+docker run -it --rm -v "%cd%:/workspace" -w /workspace doc-gen-prod:latest structure generate

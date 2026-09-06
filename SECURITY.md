@@ -1,6 +1,4 @@
----
-# SECURITY.md
----
+<!-- SECURITY.md -->
 
 # 🔐 Security Policy
 
