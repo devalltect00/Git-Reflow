@@ -14,8 +14,15 @@ Unreleased
 
 **Summary**
 
-Prepare Reflow's production image workflows for the stable `v1.0.0` release
-after the published `v1.0.0-rc.1` validation boundary.
+Promote Reflow from `v1.0.0-rc.1` to the stable `v1.0.0` release after the
+release-candidate review period.
+
+This commit finalizes the first stable release of the redesigned Reflow
+toolkit. It carries forward the four pre-RC development checkpoints, the
+repository-targeting, safe version-conversion, GitHub release-recovery, Docker
+publishing, hardened CI/CD, private-package delivery, layered architecture,
+testing, developer tooling, and documentation foundation validated in RC.1,
+plus the post-RC stable-image stabilization work.
 
 ### Stable Image Aliases
 
@@ -30,9 +37,55 @@ after the published `v1.0.0-rc.1` validation boundary.
 - Document immutable exact tags, moving minor and major aliases, and the
 - Preserve the existing annotated-tag, package-version, protected-publication,
 
+### Checkpoint Lineage
+
+- Carry forward checkpoint 1's complete Reflow redesign and its general CI/CD,
+- Carry forward checkpoint 2's private GitLab Python distribution, canonical
+- Carry forward checkpoint 3's optional source-checkout metadata helper without
+- Carry forward checkpoint 4's safe GitHub release-note rendering, populated
+- Carry forward the post-RC stabilization checkpoint's exact, minor, major,
+- Promote the combined result reviewed in RC.1; this stable commit owns only
+
+### 🚀 Releases
+
+- Apply final repository cleanup and remove temporary development artifacts that are not part of the supported product.
+- Incorporate release-blocking corrections, migration clarifications, and documentation refinements identified during RC validation.
+- Review package metadata, generated configuration, command help, public documentation, CI/CD definitions, and container destinations for the stable release.
+- Re-run the supported test, lint, formatting, documentation, package, and dry-run validation workflows before publication.
+- Preserve the completed 1.0 development history and remaining future work in the project tracking documentation.
+
+### Stable Promotion
+
+- Carry forward the complete feature, improvement, refactor, bug-fix, test, automation, and documentation set introduced in `v1.0.0-rc.1`.
+- Keep the supported command hierarchy centered on `reflow init`, `reflow tags convert local`, `reflow tags convert remote`, `reflow releases recover`, and `reflow dockerize`.
+- Keep SemVer as the default conversion destination while supporting explicit conversion to PEP 440.
+- Keep live-operation previews, confirmation, explicit local or remote conversion scope, atomic tag replacement, and consistent dry-run simulation.
+- Keep local-path and direct repository-URL targeting with managed temporary clone cleanup.
+- Keep configurable, Windows-safe progress feedback for repository cloning, conversion, recovery, Docker publishing, and initialization.
+- Keep actionable target-configuration errors while allowing informational help to remain available during configuration repair.
+- Keep centralized command error boundaries, concise remediation, debug-only tracebacks, and reliable nonzero exits for failed or partially failed Docker publication.
+- Keep dynamic provider registry destinations, annotated-tag and package-version validation, exact prerelease images, stable-only major, minor, and `latest` aliases, full tag-message release notes, and root multi-stage Docker builds established for RC.1 and finalized after RC validation.
+- Preserve `reflow tags replay` only as a deprecated compatibility alias.
+- Preserve GitHub-only release discovery and document GitLab release recovery and custom version formats as future work.
+- Prepare the repository for the stable SemVer tag and public release publication.
+
+### Stable Private Package
+
+- Promote the private GitLab PyPI distribution from the validated RC package
+- Preserve the protected-tag publication boundary, canonical PEP 440 metadata,
+- Keep unprotected tags validation-only so temporary tag pipelines can prove
+
+### Repository Maintenance Tooling
+
+- Carry forward the optional source-checkout metadata helper introduced in
+- Keep repository description and provider topics independently maintainable
+- Keep this helper outside the installed application command surface and
+- Retain the README and cumulative TODO updates without presenting a
+- Review the helper follow-ups recorded in the TODO history before release;
+
 **Tags**
 
-docs • stable-aliases • regression-tests • documentation
+release • docs • repository-cleanup • release-validation • documentation
 
 ## v1.0.0-rc.1 (2026-09-06)
 

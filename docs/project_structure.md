@@ -286,6 +286,7 @@ Common directories include:
 │   ├── badges.md
 │   ├── ci-cd.md
 │   ├── configuration.md
+│   ├── example-command.txt
 │   ├── examples.md
 │   ├── how-to-use.md
 │   ├── index.md
@@ -851,11 +852,9 @@ Common directories include:
 ├── docker-compose.yml
 ├── Dockerfile
 ├── ENGINEERING_EXECUTION_POLICY.md
-├── example-command.txt
 ├── LICENSE
 ├── Makefile
 ├── mkdocs.yml
-├── NOTE_CHANGES.txt
 ├── pyproject.toml
 ├── README.md
 ├── requirements.txt
