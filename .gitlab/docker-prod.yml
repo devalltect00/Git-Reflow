@@ -3,8 +3,9 @@
 # =========================================================
 #
 # Build production images only after the Python-package gate validates a
-# reviewed, protected, annotated release tag. Stable releases update `latest`;
-# prereleases publish only their exact version tag.
+# reviewed, protected, annotated release tag. Stable releases update the
+# matching major, minor, and `latest` aliases; prereleases publish only their
+# exact version tag.
 #
 # =========================================================
 
@@ -37,6 +38,11 @@ docker:prod:
       fi
 
       IMAGE_TAG="$(printf '%s' "$TAG" | tr '+' '-')"
+      VERSION_CORE="${TAG#v}"
+      VERSION_CORE="${VERSION_CORE%%+*}"
+      MAJOR="${VERSION_CORE%%.*}"
+      MINOR_AND_REST="${VERSION_CORE#*.}"
+      MINOR="${MINOR_AND_REST%%.*}"
 
       echo "$CI_REGISTRY_PASSWORD" |
         docker login "$CI_REGISTRY" \
@@ -60,10 +66,14 @@ docker:prod:
       docker push "$CI_REGISTRY_IMAGE:$IMAGE_TAG"
 
       if printf '%s' "$TAG" | grep -Eq "$STABLE_TAG_REGEX"; then
+        docker tag "$CI_REGISTRY_IMAGE:$IMAGE_TAG" "$CI_REGISTRY_IMAGE:v$MAJOR.$MINOR"
+        docker tag "$CI_REGISTRY_IMAGE:$IMAGE_TAG" "$CI_REGISTRY_IMAGE:v$MAJOR"
         docker tag "$CI_REGISTRY_IMAGE:$IMAGE_TAG" "$CI_REGISTRY_IMAGE:latest"
+        docker push "$CI_REGISTRY_IMAGE:v$MAJOR.$MINOR"
+        docker push "$CI_REGISTRY_IMAGE:v$MAJOR"
         docker push "$CI_REGISTRY_IMAGE:latest"
       else
-        echo "Prerelease tag detected; latest will not be updated."
+        echo "Prerelease tag detected; stable aliases will not be updated."
       fi
 
   rules:

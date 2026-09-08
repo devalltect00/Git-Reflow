@@ -142,7 +142,20 @@ docker build \
 The GitHub and GitLab development and production workflows perform this version
 resolution automatically. When the build argument is omitted, the existing
 `setuptools-scm` fallback remains in effect. See [`docs/ci-cd.md`](../ci-cd.md)
-for the annotated-tag, registry-name, prerelease, and stable `latest` contracts.
+for the annotated-tag, registry-name, prerelease, and stable alias contracts.
+
+Stable releases publish four coordinated references to the same image:
+
+| Tag | Example | Intended use |
+| --- | --- | --- |
+| Exact | `v1.0.0` | Immutable, reproducible automation pin |
+| Minor | `v1.0` | Newest stable patch in the 1.0 line |
+| Major | `v1` | Newest stable release in the 1.x line |
+| Latest | `latest` | Newest stable Reflow release |
+
+Prereleases such as `v1.0.0-rc.1` publish only their exact tag and never move
+the stable aliases. GitHub and GitLab apply the same alias policy; the release
+package gate continues to reject build-metadata tags rather than guessing.
 
 The source checkout's `.config/reflow/config.toml` is intentionally excluded
 from built images because it may contain host-specific repository paths or

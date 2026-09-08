@@ -113,6 +113,40 @@ def test_release_images_follow_the_annotated_tag_contract() -> None:
     assert '"$GITHUB_WORKFLOW"' in release
 
 
+def test_production_images_publish_stable_version_aliases_only() -> None:
+    """Stable releases should move aliases without promoting prereleases."""
+
+    github = _read(".github/workflows/docker-prod.yml")
+    gitlab = _read(".gitlab/docker-prod.yml")
+    stable_regex = "STABLE_TAG_REGEX='^v[0-9]+\\.[0-9]+\\.[0-9]+$'"
+
+    assert stable_regex in github
+    assert stable_regex in gitlab
+    assert 'echo "major=$MAJOR" >> "$GITHUB_OUTPUT"' in github
+    assert 'echo "minor=$MINOR" >> "$GITHUB_OUTPUT"' in github
+    assert 'echo "publish_aliases=$PUBLISH_ALIASES" >> "$GITHUB_OUTPUT"' in github
+    assert (
+        "type=raw,value=v${{ steps.version.outputs.major }}."
+        "${{ steps.version.outputs.minor }},"
+        "enable=${{ steps.version.outputs.publish_aliases }}"
+    ) in github
+    assert (
+        "type=raw,value=v${{ steps.version.outputs.major }},"
+        "enable=${{ steps.version.outputs.publish_aliases }}"
+    ) in github
+
+    stable_condition = 'if printf \'%s\' "$TAG" | grep -Eq "$STABLE_TAG_REGEX"; then'
+    stable_block = gitlab[gitlab.index(stable_condition) :]
+    for alias in (
+        '"$CI_REGISTRY_IMAGE:v$MAJOR.$MINOR"',
+        '"$CI_REGISTRY_IMAGE:v$MAJOR"',
+        '"$CI_REGISTRY_IMAGE:latest"',
+    ):
+        assert f'docker tag "$CI_REGISTRY_IMAGE:$IMAGE_TAG" {alias}' in stable_block
+        assert f"docker push {alias}" in stable_block
+    assert "Prerelease tag detected; stable aliases will not be updated." in gitlab
+
+
 def test_gitlab_pipeline_includes_private_python_package_stages() -> None:
     """The root pipeline should order validated package publication safely."""
 
