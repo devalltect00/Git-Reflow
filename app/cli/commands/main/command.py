@@ -152,9 +152,7 @@ def main(
 
     if ctx.invoked_subcommand is None:
         typer.echo(ctx.get_help())
-        raise typer.Exit(
-            code=1,
-        )
+        raise typer.Exit(code=0)
 
     full_command = " ".join(sys.argv[1:])
     logger = logging.getLogger("main")

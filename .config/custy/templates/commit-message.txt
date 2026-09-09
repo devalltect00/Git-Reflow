@@ -1,94 +1,32 @@
-release(main): promote Reflow v1.0.0
+fix(runtime): release Reflow v1.0.1
 
-Promote Reflow from `v1.0.0-rc.1` to the stable `v1.0.0` release after the
-release-candidate review period.
+Correct root CLI behavior and remove the import-time target-directory
+assumption that prevented the production image from starting in repositories
+without an `app/` directory.
 
-This commit finalizes the first stable release of the redesigned Reflow
-toolkit. It carries forward the four pre-RC development checkpoints, the
-repository-targeting, safe version-conversion, GitHub release-recovery, Docker
-publishing, hardened CI/CD, private-package delivery, layered architecture,
-testing, developer tooling, and documentation foundation validated in RC.1,
-plus the post-RC stable-image stabilization work.
+### Fixed
 
-### 🧭 Checkpoint Lineage
+- Route bare `reflow` invocation through the normal callback so it displays the
+  banner and help with a successful exit status.
+- Keep `reflow --help` banner behavior and `--no-banner` suppression consistent.
+- Return exit code 0 from the `--version` callback.
+- Resolve optional project-source configuration only when explicitly requested,
+  instead of validating `<cwd>/app` during module import.
+- Remove the unused initialization registry dependency on the eagerly resolved
+  project-source constant.
+- Validate the production container from `/tmp` so image builds prove that CLI
+  startup is independent of a mounted project's layout.
+- Synchronize the source fallback version at `1.0.1`.
 
-- Carry forward checkpoint 1's complete Reflow redesign and its general CI/CD,
-  container, build-version, quality, testing, and documentation hardening.
-- Carry forward checkpoint 2's private GitLab Python distribution, canonical
-  package metadata, protected publication, and immutable artifact safeguards.
-- Carry forward checkpoint 3's optional source-checkout metadata helper without
-  presenting it as an installed CLI feature.
-- Carry forward checkpoint 4's safe GitHub release-note rendering, populated
-  metadata, literal Docker examples, and regression protection.
-- Carry forward the post-RC stabilization checkpoint's exact, minor, major,
-  and `latest` stable image aliases with prerelease isolation.
-- Promote the combined result reviewed in RC.1; this stable commit owns only
-  final cleanup, reviewed corrections, and final release validation.
+### Tests and documentation
 
-### 🧹 Release Finalization
+- Add regression coverage for bare help, banner suppression, successful version
+  exits, and imports from a working directory without `app/`.
+- Update installation, Docker, reference, and documentation-baseline guidance
+  for v1.0.1.
 
-- Apply final repository cleanup and remove temporary development artifacts that are not part of the supported product.
-- Incorporate release-blocking corrections, migration clarifications, and documentation refinements identified during RC validation.
-- Review package metadata, generated configuration, command help, public documentation, CI/CD definitions, and container destinations for the stable release.
-- Re-run the supported test, lint, formatting, documentation, package, and dry-run validation workflows before publication.
-- Preserve the completed 1.0 development history and remaining future work in the project tracking documentation.
-
-### ✅ Stable Promotion
-
-- Carry forward the complete feature, improvement, refactor, bug-fix, test, automation, and documentation set introduced in `v1.0.0-rc.1`.
-- Keep the supported command hierarchy centered on `reflow init`, `reflow tags convert local`, `reflow tags convert remote`, `reflow releases recover`, and `reflow dockerize`.
-- Keep SemVer as the default conversion destination while supporting explicit conversion to PEP 440.
-- Keep live-operation previews, confirmation, explicit local or remote conversion scope, atomic tag replacement, and consistent dry-run simulation.
-- Keep local-path and direct repository-URL targeting with managed temporary clone cleanup.
-- Keep configurable, Windows-safe progress feedback for repository cloning, conversion, recovery, Docker publishing, and initialization.
-- Keep actionable target-configuration errors while allowing informational help to remain available during configuration repair.
-- Keep centralized command error boundaries, concise remediation, debug-only tracebacks, and reliable nonzero exits for failed or partially failed Docker publication.
-- Keep dynamic provider registry destinations, annotated-tag and package-version validation, exact prerelease images, stable-only major, minor, and `latest` aliases, full tag-message release notes, and root multi-stage Docker builds established for RC.1 and finalized after RC validation.
-- Preserve `reflow tags replay` only as a deprecated compatibility alias.
-- Preserve GitHub-only release discovery and document GitLab release recovery and custom version formats as future work.
-- Prepare the repository for the stable SemVer tag and public release publication.
-
-### 📦 Stable private package
-
-- Promote the private GitLab PyPI distribution from the validated RC package
-  to immutable `git-reflow==1.0.0` artifacts.
-- Preserve the protected-tag publication boundary, canonical PEP 440 metadata,
-  wheel and source-distribution verification, and deploy-token installation
-  guidance established during the RC cycle.
-- Keep unprotected tags validation-only so temporary tag pipelines can prove
-  package correctness without publishing packages, images, or releases.
-
-### 📦 Release Scope
-
-Reflow 1.0 is the major release that transforms the v0.1.0 script into a
-structured release-workflow toolkit with target-aware Git and Docker
-operations, bidirectional tag conversion, GitHub release recovery, Rich CLI
-guidance and progress, namespaced configuration, layered services and executors, expanded
-tests and documentation, modular Make workflows, Docker Compose, and GitHub
-and GitLab CI/CD support.
-
-### 🧰 Repository maintenance tooling
-
-- Carry forward the optional source-checkout metadata helper introduced in
-  untagged checkpoint 3 (`commit-message-v1.0.0-development-checkpoint-3.txt`).
-- Keep repository description and provider topics independently maintainable
-  in `pyproject.toml`, with preview-first usage and explicit warnings about
-  replacement, empty-topic clearing, and live provider updates.
-- Keep this helper outside the installed application command surface and
-  automated release/publication flow; it is maintainer tooling, not a new
-  end-user CLI feature.
-- Retain the README and cumulative TODO updates without presenting a
-  development checkpoint as a tagged release.
-- Review the helper follow-ups recorded in the TODO history before release;
-  this note does not assert that live synchronization has been validated.
-
-Tag: v1.0.0
-Previous release: v1.0.0-rc.1
-Release lineage: v0.1.0 → pre-RC checkpoints 1–4 → v1.0.0-rc.1 → post-RC stabilization → v1.0.0
+Tag: v1.0.1
+Previous version: v1.0.0
 Changelog: generated separately
 
-🔖 **Tags**:
-- Type: `#release`, `#maintenance`
-- Delivery: `#stable`, `#semver`, `#release`
-- Scope: `#repository-cleanup`, `#release-validation`, `#documentation`
-- Product: `#release-recovery`, `#tag-conversion`, `#docker`, `#repository-targeting`
+Tags: #fix #cli #docker #runtime #configuration #documentation

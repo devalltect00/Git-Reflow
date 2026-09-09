@@ -25,7 +25,7 @@ Config:
 
 Result:
 
-    TARGET_PROJECT_SOURCE
+    resolve_project_source()
     -> Path("/my-project/app")
 
 Relative paths are resolved from the current working
@@ -38,8 +38,6 @@ from app.config.config_loader import (
     get_config,
 )
 from app.core.shared import ConfigurationError
-
-config = get_config()
 
 
 def resolve_directory(
@@ -133,6 +131,7 @@ def resolve_project_source() -> Path:
         Path("/project/src")
     """
 
+    config = get_config()
     value = config.resolve(
         cli_value=None,
         config_keys=[
@@ -147,26 +146,3 @@ def resolve_project_source() -> Path:
         name="Project source",
         must_exist=True,
     )
-
-
-# =========================================================
-# Resolved Constants
-# =========================================================
-
-TARGET_PROJECT_SOURCE = resolve_project_source()
-"""
-Validated project source directory.
-
-Examples
---------
-
-app/
-src/
-backend/
-
-This value is guaranteed to:
-
-- Exist
-- Be a directory
-- Be an absolute Path
-"""

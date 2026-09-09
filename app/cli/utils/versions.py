@@ -19,6 +19,4 @@ def version_callback(value: bool):
         rprint(
             f"[{theme.primary}]Reflow[/{theme.primary}]: [{theme.secondary}]{__version__}[/{theme.secondary}]"
         )
-        raise typer.Exit(
-            code=1,
-        )
+        raise typer.Exit(code=0)

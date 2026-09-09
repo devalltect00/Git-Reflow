@@ -501,3 +501,43 @@ development checkpoints 1–4.
 - The exact `v1.0.0` image tag is the recommended reproducible automation pin.
 - `v1.0`, `v1`, and `latest` are intentionally moving aliases advanced only by stable releases.
 - The published RC.1 records and pre-RC checkpoint history remain unchanged.
+
+---
+
+<a id="v101-patch-release"></a>
+
+## Since v1.0.1
+
+Version scope: **v1.0.1 patch release**, following published v1.0.0.
+
+### ✅ Root CLI consistency
+
+- [x] Show the Reflow banner and root help for bare `reflow` invocation.
+- [x] Exit successfully for bare help, explicit `--help`, and `--version`.
+- [x] Preserve `--no-banner` suppression for both bare and explicit help.
+
+### ✅ Container portability
+
+- [x] Remove import-time project-source validation and the unused initialization-registry dependency on the resolved source constant.
+- [x] Keep project-source configuration resolution lazy for the code paths that explicitly request it.
+- [x] Change the production Docker smoke check to run Reflow from `/tmp`, proving startup does not require `/workspace/app`.
+- [x] Add regression coverage for imports from an unrelated working directory.
+- [x] Verify the v1.0.1 production image starts from a mounted documentation repository with no `/workspace/app` directory.
+
+### ✅ Release documentation
+
+- [x] Synchronize the source fallback version with v1.0.1.
+- [x] Prepare separate internal commit and public annotated-tag messages for v1.0.1.
+- [x] Update canonical installation, Docker, reference, and documentation-status pages for the patch release.
+
+### ⏳ Final release actions
+
+- [ ] Re-run the complete test, formatting, lint, pre-commit, documentation, package, and container checks against the exact release commit.
+- [ ] Confirm the production image starts with `--help` from both an empty directory and a mounted repository without an `app/` folder.
+- [ ] Review the v1.0.1 commit message, annotated tag message, generated changelog, and registry destinations.
+- [ ] Commit, create the `v1.0.1` tag, publish, and verify provider releases only with explicit release approval.
+
+### Notes
+
+- The patch does not change repository-target precedence, tag-conversion safeguards, release recovery, Docker publication, confirmation, or dry-run behavior.
+- No Git commit, tag, push, package publication, image publication, or provider release was performed while preparing this entry.

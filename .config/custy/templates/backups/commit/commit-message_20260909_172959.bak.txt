@@ -1,0 +1,32 @@
+fix(runtime): release Reflow v1.0.1
+
+Correct root CLI behavior and remove the import-time target-directory
+assumption that prevented the production image from starting in repositories
+without an `app/` directory.
+
+### Fixed
+
+- Route bare `reflow` invocation through the normal callback so it displays the
+  banner and help with a successful exit status.
+- Keep `reflow --help` banner behavior and `--no-banner` suppression consistent.
+- Return exit code 0 from the `--version` callback.
+- Resolve optional project-source configuration only when explicitly requested,
+  instead of validating `<cwd>/app` during module import.
+- Remove the unused initialization registry dependency on the eagerly resolved
+  project-source constant.
+- Validate the production container from `/tmp` so image builds prove that CLI
+  startup is independent of a mounted project's layout.
+- Synchronize the source fallback version at `1.0.1`.
+
+### Tests and documentation
+
+- Add regression coverage for bare help, banner suppression, successful version
+  exits, and imports from a working directory without `app/`.
+- Update installation, Docker, reference, and documentation-baseline guidance
+  for v1.0.1.
+
+Tag: v1.0.1
+Previous version: v1.0.0
+Changelog: generated separately
+
+Tags: #fix #cli #docker #runtime #configuration #documentation

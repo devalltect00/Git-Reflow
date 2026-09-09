@@ -140,9 +140,9 @@ RUN if [ -n "$REFLOW_BUILD_VERSION" ]; then \
         pip install --no-cache-dir .; \
     fi
 
-# Fail the image build when a runtime import or CLI startup dependency is
-# missing without depending on command-specific exit-code behavior.
-RUN python -c "from app.cli.main import app"
+# Fail the image build when a runtime dependency is missing or CLI startup
+# incorrectly assumes that the current directory has a Python ``app`` folder.
+RUN cd /tmp && reflow --no-banner --help
 
 # =========================
 # 🚀 Default command

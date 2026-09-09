@@ -16,7 +16,6 @@ typer.rich_utils._console = console
 app = typer.Typer(
     name="reflow",
     help="Release workflow automation toolkit.",
-    no_args_is_help=True,
     add_help_option=False,
     add_completion=True,
     rich_markup_mode="rich",

@@ -3,19 +3,8 @@
 from app.constants.path import (
     REFLOW_SETTINGS,
 )
-from app.constants.resolver import (
-    TARGET_PROJECT_SOURCE,
-)
 from app.core.initialize.loader import load_template
 from app.core.initialize.models.template_file import TemplateFile
-
-
-def detect_version_file():
-    import os
-
-    if os.path.exists(TARGET_PROJECT_SOURCE):
-        return f"{TARGET_PROJECT_SOURCE}/__version__.py"
-    return "src/__version__.py"
 
 
 class DirRegistry:

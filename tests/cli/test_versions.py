@@ -28,9 +28,10 @@ def test_version_callback_prints_and_exits(monkeypatch, capsys) -> None:
         lambda: "2.0.0",
     )
 
-    with pytest.raises(typer.Exit):
+    with pytest.raises(typer.Exit) as exc_info:
         versions.version_callback(True)
 
+    assert exc_info.value.exit_code == 0
     captured = capsys.readouterr()
     assert "Reflow" in captured.out
     assert "2.0.0" in captured.out

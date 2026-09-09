@@ -31,7 +31,7 @@ def test_dockerfile_validates_runtime_and_accepts_an_explicit_version() -> None:
 
     assert "ARG REFLOW_BUILD_VERSION" in dockerfile
     assert dockerfile.count("SETUPTOOLS_SCM_PRETEND_VERSION") == 2
-    assert 'RUN python -c "from app.cli.main import app"' in dockerfile
+    assert "RUN cd /tmp && reflow --no-banner --help" in dockerfile
     lines = dockerfile.splitlines()
     continued_instructions = [
         index

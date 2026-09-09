@@ -116,7 +116,7 @@ project's private GitLab package registry. Use a deploy token with
 ```bash
 python -m pip install \
   --index-url "https://<deploy-token-user>:<deploy-token>@gitlab.com/api/v4/projects/<project-id>/packages/pypi/simple" \
-  "git-reflow==1.0.0"
+  "git-reflow==1.0.1"
 ```
 
 Install a release candidate explicitly with its PEP 440 version:
@@ -141,13 +141,13 @@ multiple indexes can expose a dependency-confusion path.
 Example:
 
 ```text
-git_reflow-1.0.0-py3-none-any.whl
+git_reflow-1.0.1-py3-none-any.whl
 ```
 
 Install:
 
 ```bash
-pip install git_reflow-1.0.0-py3-none-any.whl
+pip install git_reflow-1.0.1-py3-none-any.whl
 ```
 
 Advantages:
@@ -179,13 +179,13 @@ CI/CD runners
 Example:
 
 ```text
-git_reflow-1.0.0.tar.gz
+git_reflow-1.0.1.tar.gz
 ```
 
 Install:
 
 ```bash
-pip install git_reflow-1.0.0.tar.gz
+pip install git_reflow-1.0.1.tar.gz
 ```
 
 Advantages:
@@ -361,7 +361,7 @@ Immediate updates
 Recommended:
 
 ```bash
-pip install git_reflow-1.0.0-py3-none-any.whl
+pip install git_reflow-1.0.1-py3-none-any.whl
 ```
 
 Benefits:
