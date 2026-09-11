@@ -14,9 +14,31 @@ Unreleased
 
 **Summary**
 
-Keep the supported repository-local development and production Python
-environment naming conventions out of Reflow's version control, container
-contexts, and repository-wide quality-tool inputs.
+Consolidate the reviewed repository-maintenance and presentation checkpoints
+since v1.0.1 into the next patch release.
+
+### Readme Presentation
+
+#### Project
+
+- Add the Reflow CLI preview near the top of the README.
+- Store the preview locally so it renders independently on GitHub and GitLab.
+- Preserve the existing badges, targeting guidance, command documentation,
+
+### Official Project Contact
+
+#### Project
+
+- Replace the previous contact address with the official Devalltect address in
+- Update both author and maintainer email metadata for future Python package
+- Leave existing releases, package artifacts, tags, and Git history unchanged.
+
+### Validation
+
+#### Project
+
+- Confirm the previous email has no current working-tree references.
+- Validate the project metadata, README asset path, formatting, and Git diff.
 
 ### Development Environment Isolation
 
@@ -34,9 +56,20 @@ contexts, and repository-wide quality-tool inputs.
 - Confirm both directory names are ignored without broad wildcard exclusions.
 - Run the focused container-workflow test and repository quality checks.
 
+### 📚 Documentation
+
+- Add a locally stored CLI preview that renders on GitHub and GitLab.
+- Standardize the public project contact in README and package metadata.
+- Align source and package fallback versions, the stable package classifier,
+- Synchronize the generated project-structure reference.
+
+### Compatibility
+
+- Preserve commands, configuration, confirmation, dry-run behavior, and Python
+
 **Tags**
 
-dev • virtual-environment • gitignore • dockerignore • quality
+docs
 
 ## v1.0.1 (2026-09-09)
 

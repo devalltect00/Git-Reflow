@@ -3,7 +3,7 @@
 name = "git-reflow"
 
 dynamic = ["version"]
-# version = "1.0.0"
+# version = "1.0.2"
 # With this the version will be auto-generated from git tags using setuptools_scm
 # When run
 # pip install
@@ -64,7 +64,7 @@ keywords = [
 ]
 
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
 
     "Intended Audience :: Developers",
     "Intended Audience :: System Administrators",
@@ -252,7 +252,7 @@ app = [
 version_scheme = "post-release"
 local_scheme = "no-local-version"
 
-fallback_version = "0.1.0"
+fallback_version = "1.0.2"
 
 # =========================================================
 # PYTEST

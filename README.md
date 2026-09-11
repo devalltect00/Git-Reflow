@@ -30,8 +30,25 @@ Reflow helps automate release workflows by treating Git tags as the source of tr
 ![Developer Tool](https://img.shields.io/badge/category-developer--tool-orange.svg)
 
 See: [`docs/badges.md`](docs/badges.md)
-
 for the complete badge reference.
+
+---
+
+## ℹ️ Project Metadata
+
+| Property                     | Value                                         |
+| ---------------------------- | --------------------------------------------- |
+| Project                      | Reflow                                        |
+| Current version              | `v1.0.2`                                      |
+| Python package               | `git-reflow`                                  |
+| Package compatibility        | Python 3.14+                                  |
+| Standard development runtime | Python 3.14                                   |
+| CLI framework                | Typer and Rich                                |
+| Version strategy             | SemVer tags and PEP 440 package versions      |
+| Distribution                 | Source, private GitLab PyPI, Docker, and GHCR |
+| Documentation                | Devalltect Docs and repository documentation  |
+| License                      | MIT                                           |
+| Maintainer                   | Devalltect / Rizky Fernandes                  |
 
 ---
 

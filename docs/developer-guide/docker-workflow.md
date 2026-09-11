@@ -148,7 +148,7 @@ Stable releases publish four coordinated references to the same image:
 
 | Tag | Example | Intended use |
 | --- | --- | --- |
-| Exact | `v1.0.1` | Immutable, reproducible automation pin |
+| Exact | `v1.0.2` | Immutable, reproducible automation pin |
 | Minor | `v1.0` | Newest stable patch in the 1.0 line |
 | Major | `v1` | Newest stable release in the 1.x line |
 | Latest | `latest` | Newest stable Reflow release |

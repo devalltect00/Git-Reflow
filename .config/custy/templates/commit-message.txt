@@ -1,32 +1,31 @@
-docs(project): add CLI preview and official contact
+chore(release): prepare Reflow v1.0.2
 
-Improve Reflow's repository presentation while moving public package and
-support metadata to the dedicated Devalltect contact address.
+Consolidate the reviewed repository-maintenance and presentation checkpoints
+since v1.0.1 into the next patch release.
 
-### 🖼️ README presentation
+### Maintenance
 
-- Add the Reflow CLI preview near the top of the README.
-- Store the preview locally so it renders independently on GitHub and GitLab.
-- Preserve the existing badges, targeting guidance, command documentation,
-  and release-safety explanations.
+- Exclude supported named virtual-environment directories from version
+  control, container contexts, and repository-wide quality tools.
+- Extend regression coverage for the shared container ignore contract.
+- Preserve existing repository targeting and release workflows.
 
-### 📧 Official project contact
+### Documentation and metadata
 
-- Replace the previous contact address with the official Devalltect address in
-  the README.
-- Update both author and maintainer email metadata for future Python package
-  builds.
-- Leave existing releases, package artifacts, tags, and Git history unchanged.
+- Add a locally stored CLI preview that renders on GitHub and GitLab.
+- Standardize the public project contact in README and package metadata.
+- Align source and package fallback versions, the stable package classifier,
+  and active installation and Docker references with v1.0.2.
+- Synchronize the generated project-structure reference.
 
-### ✅ Validation
+### Compatibility
 
-- Confirm the previous email has no current working-tree references.
-- Validate the project metadata, README asset path, formatting, and Git diff.
+- Preserve commands, configuration, confirmation, dry-run behavior, and Python
+  3.14+ compatibility.
 
-Tag: none
-Checkpoint: untagged documentation and metadata maintenance
+Tag: v1.0.2
+Previous version: v1.0.1
+Release type: patch
+Changelog: generated separately
 
-🔖 **Tags**:
-- Type: `#docs`, `#maintenance`
-- Scope: `#readme`, `#project-preview`, `#contact`, `#package-metadata`
-- Product: `#reflow`, `#release-automation`
+Tags: #release #maintenance #tooling #readme #metadata #reflow

@@ -69,7 +69,7 @@ placeholders with the project ID and deploy-token credentials:
 ```bash
 python -m pip install \
   --index-url "https://<deploy-token-user>:<deploy-token>@gitlab.com/api/v4/projects/<project-id>/packages/pypi/simple" \
-  "git-reflow==1.0.1"
+  "git-reflow==1.0.2"
 ```
 
 Release-candidate tags are normalized to PEP 440 package versions. For
@@ -179,13 +179,13 @@ python -m build
 Example:
 
 ```text id="gyd2o4"
-git_reflow-1.0.1-py3-none-any.whl
+git_reflow-1.0.2-py3-none-any.whl
 ```
 
 Install:
 
 ```bash id="8n1k9h"
-pip install git_reflow-1.0.1-py3-none-any.whl
+pip install git_reflow-1.0.2-py3-none-any.whl
 ```
 
 Verify:
@@ -201,13 +201,13 @@ reflow --help
 Example:
 
 ```text id="lf9xv5"
-git_reflow-1.0.1.tar.gz
+git_reflow-1.0.2.tar.gz
 ```
 
 Install:
 
 ```bash id="ifh0fk"
-pip install git_reflow-1.0.1.tar.gz
+pip install git_reflow-1.0.2.tar.gz
 ```
 
 Verify:

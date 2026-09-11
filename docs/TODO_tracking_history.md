@@ -1,11 +1,11 @@
 # TODO
 
-> Cumulative snapshot for **v1.0.0**. Earlier tasks, unfinished work,
+> Cumulative snapshot for **v1.0.2**. Earlier tasks, unfinished work,
 > considerations, ideas, cancelled items, and notes are intentionally retained.
 
-# Reflow TODO Tracking History — v1.0.0
+# Reflow TODO Tracking History — v1.0.2
 
-> Current status: see the [2026-09-08 post-RC stabilization update](#stabilization-checkpoint-2026-09-08).
+> Current status: see the [v1.0.2 patch-release preparation](#v102-patch-release).
 > Older checkboxes, test counts, plans, and decisions are preserved as recorded;
 > they are historical context, not proof that every current release gate passed.
 
@@ -540,4 +540,39 @@ Version scope: **v1.0.1 patch release**, following published v1.0.0.
 ### Notes
 
 - The patch does not change repository-target precedence, tag-conversion safeguards, release recovery, Docker publication, confirmation, or dry-run behavior.
+- No Git commit, tag, push, package publication, image publication, or provider release was performed while preparing this entry.
+
+---
+
+<a id="v102-patch-release"></a>
+
+## Since v1.0.2
+
+Version scope: **v1.0.2 patch release**, following published v1.0.1.
+
+### ✅ Repository maintenance
+
+- [x] Exclude supported development, production, publishing, and auxiliary virtual-environment directory names from version control, container contexts, and repository-wide quality tools.
+- [x] Preserve repository targeting, tag conversion, release recovery, and Docker publication behavior.
+- [x] Extend regression coverage for the shared container ignore contract.
+
+### ✅ Documentation, metadata, and versioning
+
+- [x] Add a repository-local CLI preview that renders on GitHub and GitLab.
+- [x] Add concise current-version and distribution metadata to the README.
+- [x] Standardize the public project contact in README and package metadata without recording private contact details in release messages.
+- [x] Synchronize the source fallback, package fallback metadata, installation examples, Docker guidance, and release messages with v1.0.2.
+- [x] Regenerate the project-structure reference for the maintained repository layout.
+
+### ⏳ Final release actions
+
+- [ ] Re-run the complete test, formatting, lint, pre-commit, documentation, package, and container checks against the exact release commit.
+- [ ] Confirm repository-path, repository-URL, local conversion, remote conversion, release recovery, Docker publication, confirmation, and dry-run boundaries remain unchanged.
+- [ ] Review the v1.0.2 commit message, annotated tag message, generated changelog, and registry destinations.
+- [ ] Commit, create the `v1.0.2` tag, publish, and verify provider releases only with explicit release approval.
+
+### Notes
+
+- v1.0.2 is repository maintenance and presentation work; it does not add or rename a public command.
+- Historical release sections and versioned TODO snapshots remain unchanged.
 - No Git commit, tag, push, package publication, image publication, or provider release was performed while preparing this entry.
