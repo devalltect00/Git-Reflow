@@ -1,32 +1,26 @@
-fix(runtime): release Reflow v1.0.1
+chore(dev): checkpoint isolate named virtual environments
 
-Correct root CLI behavior and remove the import-time target-directory
-assumption that prevented the production image from starting in repositories
-without an `app/` directory.
+Keep the supported repository-local development and production Python
+environment naming conventions out of Reflow's version control, container
+contexts, and repository-wide quality-tool inputs.
 
-### Fixed
+### 🧰 Development environment isolation
 
-- Route bare `reflow` invocation through the normal callback so it displays the
-  banner and help with a successful exit status.
-- Keep `reflow --help` banner behavior and `--no-banner` suppression consistent.
-- Return exit code 0 from the `--version` callback.
-- Resolve optional project-source configuration only when explicitly requested,
-  instead of validating `<cwd>/app` during module import.
-- Remove the unused initialization registry dependency on the eagerly resolved
-  project-source constant.
-- Validate the production container from `/tmp` so image builds prove that CLI
-  startup is independent of a mounted project's layout.
-- Synchronize the source fallback version at `1.0.1`.
+- Ignore root-level `dev_venv/`, `prod_venv/`, `venv_dev/`, `venv_prod/`,
+  `publish_venv/`, `venv_publish/`, `other_venv/`, and `venv_other/`
+  directories in Git.
+- Exclude all eight names from Docker build contexts and Prettier discovery.
+- Exclude all eight names from Black and Ruff repository-wide checks.
+- Extend container-workflow regression coverage for the shared ignore contract.
 
-### Tests and documentation
+### ✅ Validation intent
 
-- Add regression coverage for bare help, banner suppression, successful version
-  exits, and imports from a working directory without `app/`.
-- Update installation, Docker, reference, and documentation-baseline guidance
-  for v1.0.1.
+- Confirm both directory names are ignored without broad wildcard exclusions.
+- Run the focused container-workflow test and repository quality checks.
 
-Tag: v1.0.1
-Previous version: v1.0.0
-Changelog: generated separately
+Checkpoint: untagged development maintenance
 
-Tags: #fix #cli #docker #runtime #configuration #documentation
+🔖 **Tags**:
+- Type: `#chore`, `#maintenance`
+- Scope: `#virtual-environment`, `#gitignore`, `#dockerignore`, `#quality`
+- Product: `#reflow`, `#developer-experience`

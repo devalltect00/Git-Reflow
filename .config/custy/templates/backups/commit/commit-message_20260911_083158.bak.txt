@@ -1,0 +1,26 @@
+chore(dev): checkpoint isolate named virtual environments
+
+Keep the supported repository-local development and production Python
+environment naming conventions out of Reflow's version control, container
+contexts, and repository-wide quality-tool inputs.
+
+### 🧰 Development environment isolation
+
+- Ignore root-level `dev_venv/`, `prod_venv/`, `venv_dev/`, `venv_prod/`,
+  `publish_venv/`, `venv_publish/`, `other_venv/`, and `venv_other/`
+  directories in Git.
+- Exclude all eight names from Docker build contexts and Prettier discovery.
+- Exclude all eight names from Black and Ruff repository-wide checks.
+- Extend container-workflow regression coverage for the shared ignore contract.
+
+### ✅ Validation intent
+
+- Confirm both directory names are ignored without broad wildcard exclusions.
+- Run the focused container-workflow test and repository quality checks.
+
+Checkpoint: untagged development maintenance
+
+🔖 **Tags**:
+- Type: `#chore`, `#maintenance`
+- Scope: `#virtual-environment`, `#gitignore`, `#dockerignore`, `#quality`
+- Product: `#reflow`, `#developer-experience`
