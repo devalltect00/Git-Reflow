@@ -1,5 +1,9 @@
 # Reflow
 
+<p align="center">
+  <img src="docs/assets/reflow.png" alt="Reflow command-line interface" width="760">
+</p>
+
 Release Recovery, Version Conversion, and Docker Release Automation.
 
 Reflow helps automate release workflows by treating Git tags as the source of truth for releases, versioning, and container publishing.
@@ -510,8 +514,8 @@ development milestones, see the [TODO tracking history](docs/TODO_tracking_histo
 
 See [LICENSE](LICENSE) for the licensing terms.
 
-📧 Contact: `rizkypffdev37@gmail.com`
+📧 Contact: `devalltect00@gmail.com`
 
 ---
 
-_Handcrafted with ❤️ by Devalltect / Rizky Fernandes_
+_Crafted with ❤️ by Devalltect / Rizky Fernandes_
